@@ -4,7 +4,7 @@ import SearchBar from '../(Components)/SearchBar'
 
 export default function NavbarComponent() {
   return (
-    <div className="flex flex-row space-x-32">
+    <div className="flex flex-row space-x-10 items-center justify-start">
       <Logo />
       <SearchBar />
     </div>
