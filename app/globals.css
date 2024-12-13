@@ -66,8 +66,6 @@ body {
   transform: translateX(1.5em);
 }
 
-#Search::-webkit-search-cancel-button,
-input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-indicator {
+#Search::-webkit-search-cancel-button {
   -webkit-appearance: none;
-  display: none !important;
 }

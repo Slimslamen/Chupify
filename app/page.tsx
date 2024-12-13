@@ -6,12 +6,12 @@ import NavbarComponent from "./NavbarFolder/NavbarComponent";
 export default function Home() {
   return (
     <div>
-      <div className="fixed top-5 left-20 space-y-4">
+      <div className="space-y-8 ml-12">
         <NavbarComponent />
         <ArtistComponent />
         <Albums />
       </div>
-      <div className="fixed h-[46.2em] top-0 right-0">
+      <div className="fixed h-[33em] top-0 right-0">
         <Artists />
       </div>
     </div>

@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 
 export default function SearchBar() {
@@ -30,16 +31,8 @@ export default function SearchBar() {
           id="Search"
           type="search"
           name="search"
-          list="SearchTip"
         />
       </form>
-      <datalist id="SearchTip">
-        <option value="J.Cole"></option>
-        <option value="Maluma"></option>
-        <option value="Bad Bunny"></option>
-        <option value="Rihanna"></option>
-        <option value="Shakira"></option>
-      </datalist>
     </div>
   );
 }

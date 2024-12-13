@@ -13,6 +13,9 @@ export default {
         foreground: "var(--foreground)",
         componentGrey: "#53535350",
         componentGreyHover: "#53535380",
+        componentLightGrey: "#53535310",
+        TextColor: "#838383",
+        LightHover: "#939393"
       },
     },
   },
