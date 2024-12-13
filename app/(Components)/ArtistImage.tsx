@@ -6,12 +6,13 @@ interface Iprops {
   alt: string;
   height: number;
   width: number;
+  Radius: string;
 }
 
-export default function ArtistImage({ src, alt, height, width }: Iprops) {
+export default function ArtistImage({ src, alt, height, width, Radius }: Iprops) {
   return (
     <div>
-      <Image src={src} alt={alt} height={height} width={width} />
+      <Image src={src} alt={alt} height={height} width={width} style={{borderRadius:Radius}}/>
     </div>
   );
 }
