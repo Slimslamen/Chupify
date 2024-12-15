@@ -12,7 +12,7 @@ interface Iprops {
 export default function ArtistImage({ src, alt, height, width, Radius }: Iprops) {
   return (
     <div>
-      <Image src={src} alt={alt} height={height} width={width} style={{borderRadius:Radius}}/>
+      <Image priority={width >= 150 ? true : false} src={src} alt={alt} height={height} width={width} style={{borderRadius:Radius}}/>
     </div>
   );
 }

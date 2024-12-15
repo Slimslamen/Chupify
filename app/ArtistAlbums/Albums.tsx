@@ -12,7 +12,7 @@ export default function Albums() {
       </div>
       <div className="flex flex-row w-full justify-around">
         <div className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-4 transition ease-in-out delay-50">
-          <ArtistImage src={imgsrc} alt={altText} height={160} width={160} Radius={"4px"} />
+          <ArtistImage src={imgsrc} alt={altText} height={140} width={140} Radius={"4px"} />
           <div className="space-y-1">
             <h4 className="font-extrabold w-full">Forest Hills Drive</h4>
             <div className="flex flex-row justify-between w-full items-center">
@@ -22,7 +22,7 @@ export default function Albums() {
           </div>
         </div>
         <div className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-4 transition ease-in-out delay-50">
-          <ArtistImage src={imgsrc} alt={altText} height={160} width={160} Radius={"4px"} />
+          <ArtistImage src={imgsrc} alt={altText} height={140} width={140} Radius={"4px"} />
           <div className="space-y-1">
             <h4 className="font-extrabold w-full">Forest Hills Drive</h4>
             <div className="flex flex-row justify-between w-full items-center">
@@ -32,7 +32,7 @@ export default function Albums() {
           </div>
         </div>
         <div className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-4 transition ease-in-out delay-50">
-          <ArtistImage src={imgsrc} alt={altText} height={160} width={160} Radius={"4px"} />
+          <ArtistImage src={imgsrc} alt={altText} height={140} width={140} Radius={"4px"} />
           <div className="space-y-1">
             <h4 className="font-extrabold w-full">Forest Hills Drive</h4>
             <div className="flex flex-row justify-between w-full items-center">
@@ -42,7 +42,7 @@ export default function Albums() {
           </div>
         </div>
         <div className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-4 transition ease-in-out delay-50">
-          <ArtistImage src={imgsrc} alt={altText} height={160} width={160} Radius={"4px"} />
+          <ArtistImage src={imgsrc} alt={altText} height={140} width={140} Radius={"4px"} />
           <div className="space-y-1">
             <h4 className="font-extrabold w-full">Forest Hills Drive</h4>
             <div className="flex flex-row justify-between w-full items-center">
