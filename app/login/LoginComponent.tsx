@@ -1,31 +1,21 @@
 'use client'
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 
 export default function LoginComponent() {
-
-  const clientId:string = "b27e34422d36480d98024631a9b2bc17";
-  const clientSecret:string = "8c7c072e89d44197a669b8a6b1c24be8";
-
   const [AccessToken, setAccessToken] = useState({access_token:"", token_type:"", expires_in:0})
-
-  const getSpotifyAccessToken = async () => {
-      const response = await fetch('https://accounts.spotify.com/api/token', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
-      })
-      if(response.ok)
-      setAccessToken(await response.json());
-      else if(!response.ok)
-      {
-        console.log(response.status)
-      }
-      alert(AccessToken.access_token)
-  }
+  
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getStaticProps();
+      setAccessToken(token);
+    };
+    fetchToken();
+  }, [])
+  // node --trace-uncaught
+  
   return (
     <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
       <h1>Insert Your Spotify Client-Id</h1>
@@ -39,10 +29,33 @@ export default function LoginComponent() {
           </svg>
           <input id="" name="" type="text" className="w-full text-black bg-inherit focus:outline-none pl-1" />
         </div>
-        <Link onClick={() => getSpotifyAccessToken()} href="/pages/index" className="btn">
+        <Link onClick={() => getStaticProps()} href={{pathname:"/pages/index", query:{ key: JSON.stringify(AccessToken) } }} className="btn">
           Login
         </Link>
       </form>
     </div>
   );
+}
+
+
+export async function getStaticProps() {
+  const clientId:string = "b27e34422d36480d98024631a9b2bc17";
+  const clientSecret:string = "8c7c072e89d44197a669b8a6b1c24be8";
+  // const artist:string = "6qxpnaukVayrQn6ViNvu9I?si=L9jIcE1VRR222gAmtdWjDw";
+ 
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
+    })
+    if(response.ok){
+        const data = (await response.json());
+        return data
+    }
+    else if(!response.ok)
+    {
+      return response.status;
+    }
 }

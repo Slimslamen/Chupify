@@ -1,4 +1,4 @@
-export interface UserProfile {
+export interface IUserProfile {
     country: string;
     display_name: string;
     email: string;
@@ -10,13 +10,18 @@ export interface UserProfile {
     followers: { href: string; total: number; };
     href: string;
     id: string;
-    images: Image[];
+    images: IPic[];
     product: string;
     type: string;
     uri: string;
 }
 
-export interface Image {
+export interface IToken{
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+  }
+export interface IPic {
     url: string;
     height: number;
     width: number;
