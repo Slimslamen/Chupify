@@ -1,9 +1,10 @@
+import MainComponent from "@/app/main/MainComponent";
 
 
 export default function Home() {
 
 
   return (
-      <Home />
+      <MainComponent />
   );
 }

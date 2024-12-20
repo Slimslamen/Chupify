@@ -10,7 +10,7 @@ import Artists from "../FollowList/Artists";
 
 
 
-export default function Home() {
+export default function MainComponent() {
 
   const searchParams = useSearchParams();
   
@@ -21,14 +21,17 @@ export default function Home() {
   };
   useEffect(() => {
     const FetchArtist = async () => {
-      const search = searchParams.get("key")
-      console.log(search);
+      const search = await searchParams.get("key")
+      console.log("Params "+search);
       if(search){
          test = JSON.parse(search) as IToken;
+         console.log("Test " + test.access_token)
       }
-      console.log(test);
+      const res = getStaticProps(test);
+      res.then((R) => console.log("Response"+R))
+      res.catch((err) => console.log(err))
+      res.finally(() => console.log("Success"))
     };
-    getStaticProps(test);
     FetchArtist();
   }, [])
   
@@ -52,8 +55,10 @@ export async function getStaticProps({access_token}:IToken) {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access_token}`,
+          "Access-Control-Allow-Origin": "*"
         },
       });
+      console.log("Token "+access_token)  
       if (response.ok) {
         const data = await response.json();
         console.log(data);      
