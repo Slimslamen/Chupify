@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import ArtistTracks from "./ArtistTracks";
 import ArtistImage from "../(Components)/ArtistImage";
 import ListSwitch from "../(Components)/ListSwitch";
+import { IContext } from "../Interfaces/types";
+import { AppContext } from "../Context/SpotifyContext";
 
 export default function ArtistComponent() {
+
+  const { Artist } = useContext(AppContext)! as IContext;
+
   const imgsrc = "/JCole.webp";
   const altText = "Test";
   return (

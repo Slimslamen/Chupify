@@ -1,39 +1,39 @@
 'use client'
-import { useEffect } from "react";
-
+import { useContext, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { IToken } from "@/app/Interfaces/UserProfile";
+import { AppContext } from "../Context/SpotifyContext";
+import { IContext, IToken } from "@/app/Interfaces/types";
 import NavbarComponent from "../NavbarFolder/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
-
-
 export default function MainComponent() {
+
+  const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
 
   const searchParams = useSearchParams();
   
-  let test : IToken = {
+  const TokenRef = useRef<IToken>({
     access_token: "",
     expires_in: 0,
     token_type: ""
-  };
+  });
   useEffect(() => {
-    const FetchArtist = async () => {
+    const GetSearchQuery = async () => {
       const search = await searchParams.get("key")
-      console.log("Params "+search);
       if(search){
-         test = JSON.parse(search) as IToken;
-         console.log("Test " + test.access_token)
-      }
-      const res = getStaticProps(test);
-      res.then((R) => console.log("Response"+R))
-      res.catch((err) => console.log(err))
-      res.finally(() => console.log("Success"))
+         TokenRef.current = JSON.parse(search) as IToken;
+      }   
+     const res = await FetchArtist(TokenRef.current);
+     if(res)
+     setArtist(res);
+     console.log(res);
+     console.log("img "+Artist?.images[0].url);
+     
     };
-    FetchArtist();
-  }, [])
+    GetSearchQuery();
+  }, [TokenRef])
   
 
   return (
@@ -48,22 +48,4 @@ export default function MainComponent() {
       </div>
     </div>
   );
-}
-
-export async function getStaticProps({access_token}:IToken) {
-    const response = await fetch(`https://open.spotify.com/artist/6qxpnaukVayrQn6ViNvu9I?si=KCc82mAfS_KZttYqhsp6Rw`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Access-Control-Allow-Origin": "*"
-        },
-      });
-      console.log("Token "+access_token)  
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);      
-        return data;
-      } else if (!response.ok) {
-        return response.status;
-      }
 }

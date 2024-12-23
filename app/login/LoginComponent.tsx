@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Token } from "../lib/Token";
 
 
 export default function LoginComponent() {
@@ -14,11 +15,11 @@ export default function LoginComponent() {
     };
     fetchToken();
   }, [])
-  // node --trace-uncaught
   
   return (
     <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
       <h1>Insert Your Spotify Client-Id</h1>
+      <p>b27e34422d36480d98024631a9b2bc17</p>
       <form className="w-full flex flex-col items-center justify-center space-y-8">
         <div className="w-[69%] flex flex-row gap-1 bg-white/80 rounded-md py-1 px-1">
           <svg viewBox="0 0 344 384" height="26.72093023255814" width="24">
@@ -39,23 +40,6 @@ export default function LoginComponent() {
 
 
 export async function getStaticProps() {
-  const clientId:string = "b27e34422d36480d98024631a9b2bc17";
-  const clientSecret:string = "8c7c072e89d44197a669b8a6b1c24be8";
-  // const artist:string = "6qxpnaukVayrQn6ViNvu9I?si=L9jIcE1VRR222gAmtdWjDw";
- 
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
-    })
-    if(response.ok){
-        const data = (await response.json());
-        return data
-    }
-    else if(!response.ok)
-    {
-      return response.status;
-    }
+ const response = Token();
+ return response;
 }
