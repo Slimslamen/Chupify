@@ -9,9 +9,7 @@ import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
 export default function MainComponent() {
-
-  const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
-
+  const { FetchArtist, setArtist } = useContext(AppContext)! as IContext;
   const searchParams = useSearchParams();
   
   const TokenRef = useRef<IToken>({
@@ -19,31 +17,32 @@ export default function MainComponent() {
     expires_in: 0,
     token_type: ""
   });
+
   useEffect(() => {
     const GetSearchQuery = async () => {
-      const search = await searchParams.get("key")
-      if(search){
-         TokenRef.current = JSON.parse(search) as IToken;
-      }   
-     const res = await FetchArtist(TokenRef.current);
-     if(res)
-     setArtist(res);
-     console.log(res);
-     console.log("img "+Artist?.images[0].url);
-     
+      const search = await searchParams.get("key");
+      if (search) {
+        const token = JSON.parse(search) as IToken;
+        if (JSON.stringify(TokenRef.current) !== JSON.stringify(token)) {
+          TokenRef.current = token;
+          const res = await FetchArtist(TokenRef.current);
+          if (res) {
+            setArtist(res);
+          }
+        }
+      }
     };
     GetSearchQuery();
-  }, [TokenRef])
-  
+  }, [searchParams, FetchArtist, setArtist]);
 
   return (
     <div>
-      <div className="space-y-8 ml-12">
+      <div className="space-y-8 ml-12 z-0">
         <NavbarComponent />
         <ArtistComponent />
         <Albums />
       </div>
-      <div className="fixed h-[33em] top-0 right-0">
+      <div className="fixed h-[33em] top-0 right-0 z-10">
         <Artists />
       </div>
     </div>
