@@ -14,8 +14,9 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const artist: string = "6qxpnaukVayrQn6ViNvu9I";
   const Artista : string = "7HO5fOXE4gh3lzZn64tX2E";
   
+  const Token = localStorage.getItem("token");
 
-  async function FetchArtist(Token: string) {
+  async function FetchArtist() {
     const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
       method: "GET",
       headers: {
@@ -27,7 +28,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       const data = await response.json();
       return data;
     } else if (!response.ok) {
-        throw new Error(`Error fetching artist albums: ${response.status}`);
+       throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
   async function FetchArtistAlbums(Token: string) {
@@ -46,23 +47,24 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     }
   }
 
-  const searchParams = useSearchParams();
-
-  async function RefreshToken(Token: string) {
-    const RefreshToken = await searchParams.get("key");
+  async function RefreshToken() {
     const response = await fetch(`https://accounts.spotify.com/api/token`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${Token}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body:`grant_type=refresh_token&refresh_token=${RefreshToken}&client_id=${clientId}`
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: Token!,
+        client_id: clientId
+      })
     });
     if (response.ok) {
       const data = await response.json();
-
+        console.log(data);
       return data;
     } else if (!response.ok) {
+        console.log("failed");
       return response.status;
     }
   }

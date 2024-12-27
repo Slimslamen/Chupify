@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Token } from "../lib/Token";
+import { Token } from "../Token";
 
 
 export default function LoginComponent() {
@@ -30,7 +30,7 @@ export default function LoginComponent() {
           </svg>
           <input id="" name="" type="text" className="w-full text-black bg-inherit focus:outline-none pl-1" />
         </div>
-        <Link onClick={() => getStaticProps()} href={{pathname:"/pages/index", query:{ key: JSON.stringify(AccessToken) } }} className="btn">
+        <Link onClick={() => getStaticProps()} href={{pathname:"/pages/index"}} className="btn">
           Login
         </Link>
       </form>

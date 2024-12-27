@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import ArtistImage from "../(Components)/ArtistImage";
 import FollowButton from "../(Components)/Buttons/FollowButton";
 import { AppContext } from "../Context/SpotifyContext";
@@ -46,7 +46,7 @@ export default function Albums() {
           Albums.items.map((album, index) => (
             <div
               key={index}
-              className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-4 transition ease-in-out delay-50"
+              className="flex flex-col space-y-2 w-40 bg-componentLightGrey hover:bg-componentGrey rounded-md py-3 px-3 transition ease-in-out delay-50"
             >
               <ArtistImage src={album.images[0].url} alt={album.name} height={140} width={140} Radius={"4px"} />
               <div className="space-y-1">

@@ -12,6 +12,7 @@ export async function Token() {
     })
     if(response.ok){
         const data = (await response.json());
+        localStorage.setItem("token", data.access_token)
         return data
     }
     else if(!response.ok)
