@@ -1,40 +1,22 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect } from "react";
 import ArtistImage from "../(Components)/ArtistImage";
 import FollowButton from "../(Components)/Buttons/FollowButton";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "../Interfaces/types";
-import { useSearchParams } from "next/navigation";
 
 export default function Albums() {
-  const { FetchArtistAlbums, setAlbums, Albums, setArtist } = useContext(AppContext)! as IContext;
-
-  const searchParams = useSearchParams();
-
-  const TokenRef = useRef<string>("");
+  const { FetchArtistAlbums, setAlbums, Albums } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
     const GetSearchQuery = async () => {
-      const search = await searchParams.get("key");
-      if (search) {
-        const token = JSON.parse(search) as string;
-        if (TokenRef.current !== token) {
-          TokenRef.current = token;
-          const res = await FetchArtistAlbums(TokenRef.current);
-          if (res) {
-            setAlbums(res);
-          }
-          console.log("response: ", res);
-        }
+      const res = await FetchArtistAlbums();
+      if (res) {
+        setAlbums(res);
       }
+      console.log("response: ", Albums);
     };
     GetSearchQuery();
-  }, [searchParams, FetchArtistAlbums, setArtist, Albums]);
-
-  useEffect(() => {
-    if (Albums) {
-      console.log("Updated Albums state: ", Albums);
-    }
-  }, [Albums]);
+  }, []);
 
   return (
     <div className="bg-componentGrey rounded-lg w-[55em] h-80 flex flex-col space-y-5 overflow-x-auto">

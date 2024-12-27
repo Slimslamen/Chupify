@@ -1,6 +1,6 @@
 export interface IContext {
   FetchArtist: () => Promise<IArtist>;
-  FetchArtistAlbums: (Token: string) => Promise<IAlbumDataResponse>;
+  FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
   RefreshToken: () => Promise<IRefreshToken>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;

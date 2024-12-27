@@ -2,7 +2,7 @@
 
 import React, { createContext, ReactNode, useState } from "react";
 import { IAlbumDataResponse, IArtist, IContext } from "../Interfaces/types";
-import { useSearchParams } from "next/navigation";
+
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -31,7 +31,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
        throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
-  async function FetchArtistAlbums(Token: string) {
+  async function FetchArtistAlbums() {
     const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/albums?limit=4`, {
       method: "GET",
       headers: {
@@ -41,7 +41,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     });
     if (response.ok) {
       const data = await response.json();
-      return data as IAlbumDataResponse;
+      return data;
     } else {
       throw new Error(`Error fetching artist albums: ${response.status}`);
     }

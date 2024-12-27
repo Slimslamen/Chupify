@@ -16,7 +16,6 @@ export default function MainComponent() {
       if (res) {
         setArtist(res);
       }
-
       RefreshToken();
     };
     GetSearchQuery();
