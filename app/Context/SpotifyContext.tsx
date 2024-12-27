@@ -1,21 +1,25 @@
 "use client";
 
 import React, { createContext, ReactNode, useState } from "react";
-import { IAlbumData, IArtist, IContext, IToken } from "../Interfaces/types";
+import { IAlbumDataResponse, IArtist, IContext } from "../Interfaces/types";
+import { useSearchParams } from "next/navigation";
 
 const AppContext = createContext<IContext | null>(null);
 
 function SpotifyContext({ children }: { children: ReactNode }) {
   const [Artist, setArtist] = useState<IArtist | undefined>();
-  const [Albums, setAlbums] = useState<IAlbumData[] | undefined>()
+  const [Albums, setAlbums] = useState<IAlbumDataResponse | undefined>();
 
-  const artist: string = "6qxpnaukVayrQn6ViNvu9I?si=L9jIcE1VRR222gAmtdWjDw";
+  const clientId: string = "b27e34422d36480d98024631a9b2bc17";
+  const artist: string = "6qxpnaukVayrQn6ViNvu9I";
+  const Artista : string = "7HO5fOXE4gh3lzZn64tX2E";
+  
 
-  async function FetchArtist({ access_token, token_type }: IToken) {
-    const response = await fetch(`https://api.spotify.com/v1/artists/${artist}`, {
+  async function FetchArtist(Token: string) {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
       method: "GET",
       headers: {
-        Authorization: `${token_type} ${access_token}`,
+        Authorization: `Bearer ${Token}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
@@ -23,16 +27,36 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       const data = await response.json();
       return data;
     } else if (!response.ok) {
-      return response.status;
+        throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
-  async function FetchArtistAlbums({ access_token, token_type }: IToken) {
+  async function FetchArtistAlbums(Token: string) {
     const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/albums?limit=4`, {
       method: "GET",
       headers: {
-        Authorization: `${token_type} ${access_token}`,
+        Authorization: `Bearer ${Token}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data as IAlbumDataResponse;
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+  }
+
+  const searchParams = useSearchParams();
+
+  async function RefreshToken(Token: string) {
+    const RefreshToken = await searchParams.get("key");
+    const response = await fetch(`https://accounts.spotify.com/api/token`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body:`grant_type=refresh_token&refresh_token=${RefreshToken}&client_id=${clientId}`
     });
     if (response.ok) {
       const data = await response.json();
@@ -45,10 +69,11 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const Values: IContext = {
     FetchArtist,
     FetchArtistAlbums,
+    RefreshToken,
     Artist,
     setArtist,
     setAlbums,
-    Albums
+    Albums,
   };
   return (
     <>

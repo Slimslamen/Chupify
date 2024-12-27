@@ -6,12 +6,12 @@ import { Token } from "../lib/Token";
 
 
 export default function LoginComponent() {
-  const [AccessToken, setAccessToken] = useState({access_token:"", token_type:"", expires_in:0})
+  const [AccessToken, setAccessToken] = useState<string>("")
   
   useEffect(() => {
     const fetchToken = async () => {
       const token = await getStaticProps();
-      setAccessToken(token);
+      setAccessToken(token.access_token);
     };
     fetchToken();
   }, [])
@@ -39,7 +39,7 @@ export default function LoginComponent() {
 }
 
 
-export async function getStaticProps() {
+ async function getStaticProps() {
  const response = Token();
  return response;
 }

@@ -1,10 +1,11 @@
 export interface IContext{
-    FetchArtist: (Token:IToken) => Promise<IArtist>;
-    FetchArtistAlbums: (Token:IToken) => Promise<IAlbumData[]>;
+    FetchArtist: (Token:string) => Promise<IArtist>;
+    FetchArtistAlbums: (Token:string) => Promise<IAlbumDataResponse>;
+    RefreshToken: (Token: string) => Promise<any>;
     setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
     Artist: IArtist | undefined;
-    setAlbums: React.Dispatch<React.SetStateAction<IAlbumData[] | undefined>>;
-    Albums: IAlbumData[] | undefined
+    setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
+    Albums: IAlbumDataResponse | undefined
 }
 export interface IUserProfile {
     country?: string;
@@ -35,12 +36,6 @@ export interface IArtist {
     type: string;
     uri: string;
 }
-
-export interface IToken{
-    access_token: string;
-    expires_in: number;
-    token_type: string;
-  }
 export interface IPic {
     url: string;
     height: number;
@@ -71,4 +66,14 @@ export interface IAlbumData {
   uri: string;
   artists: IArtist[];
   album_group: string;
+}
+
+export interface IAlbumDataResponse {
+  href: string;
+  items: IAlbumData[];
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
 }

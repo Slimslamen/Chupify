@@ -2,28 +2,24 @@
 import { useContext, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { AppContext } from "../Context/SpotifyContext";
-import { IContext, IToken } from "@/app/Interfaces/types";
+import { IContext } from "@/app/Interfaces/types";
 import NavbarComponent from "../NavbarFolder/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist } = useContext(AppContext)! as IContext;
+  const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
   const searchParams = useSearchParams();
   
-  const TokenRef = useRef<IToken>({
-    access_token: "",
-    expires_in: 0,
-    token_type: ""
-  });
+  const TokenRef = useRef<string>("");
 
   useEffect(() => {
     const GetSearchQuery = async () => {
       const search = await searchParams.get("key");
       if (search) {
-        const token = JSON.parse(search) as IToken;
-        if (JSON.stringify(TokenRef.current) !== JSON.stringify(token)) {
+        const token = JSON.parse(search);
+        if (TokenRef.current !== token) {
           TokenRef.current = token;
           const res = await FetchArtist(TokenRef.current);
           if (res) {
@@ -34,6 +30,11 @@ export default function MainComponent() {
     };
     GetSearchQuery();
   }, [searchParams, FetchArtist, setArtist]);
+    useEffect(() => {
+      if (Artist) {
+        console.log("Updated Albums state: ", Artist);
+      }
+    }, [Artist]);
 
   return (
     <div>
