@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, ReactNode, useState } from "react";
-import { IAlbumDataResponse, IArtist, IContext } from "../Interfaces/types";
+import { IAlbumDataResponse, IArtist, IContext, ITrack } from "../Interfaces/types";
 
 
 const AppContext = createContext<IContext | null>(null);
@@ -9,6 +9,7 @@ const AppContext = createContext<IContext | null>(null);
 function SpotifyContext({ children }: { children: ReactNode }) {
   const [Artist, setArtist] = useState<IArtist | undefined>();
   const [Albums, setAlbums] = useState<IAlbumDataResponse | undefined>();
+  const [Tracks, setTracks] = useState<ITrack[] | undefined>();
 
   const clientId: string = "b27e34422d36480d98024631a9b2bc17";
   const artist: string = "6qxpnaukVayrQn6ViNvu9I";
@@ -27,7 +28,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     if (response.ok) {
       const data = await response.json();
       return data;
-    } else if (!response.ok) {
+    } else {
        throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
@@ -47,6 +48,22 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     }
   }
 
+  async function Fetch5MostPopularTracks() {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/top-tracks`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${Token}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error(`Error fetching artist albums: ${response.status}`);
+      }
+  }
+
   async function RefreshToken() {
     const response = await fetch(`https://accounts.spotify.com/api/token`, {
       method: "POST",
@@ -63,19 +80,21 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       const data = await response.json();
         console.log(data);
       return data;
-    } else if (!response.ok) {
-        console.log("failed");
-      return response.status;
-    }
+    } else {
+        throw new Error(`Error fetching artist albums: ${response.status}`);
+      }
   }
   const Values: IContext = {
     FetchArtist,
     FetchArtistAlbums,
+    Fetch5MostPopularTracks,
     RefreshToken,
     Artist,
     setArtist,
     setAlbums,
     Albums,
+    Tracks, 
+    setTracks
   };
   return (
     <>

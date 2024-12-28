@@ -8,7 +8,7 @@ import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist, RefreshToken } = useContext(AppContext)! as IContext;
+  const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
     const GetSearchQuery = async () => {
@@ -16,14 +16,14 @@ export default function MainComponent() {
       if (res) {
         setArtist(res);
       }
-      RefreshToken();
+      //RefreshToken();
     };
     GetSearchQuery();
   }, []);
   
   useEffect(() => {
     if (Artist) {
-      console.log("Updated Albums state: ", Artist);
+      console.log("Updated Artist state: ", Artist);
     }
   }, [Artist]);
 

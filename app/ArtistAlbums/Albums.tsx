@@ -13,10 +13,16 @@ export default function Albums() {
       if (res) {
         setAlbums(res);
       }
-      console.log("response: ", Albums);
+      console.log("Albums: ", Albums);
     };
     GetSearchQuery();
   }, []);
+
+useEffect(() => {
+    if (Albums) {
+      console.log("Updated Albums state: ", Albums);
+    }
+  }, [Albums]);
 
   return (
     <div className="bg-componentGrey rounded-lg w-[55em] h-80 flex flex-col space-y-5 overflow-x-auto">

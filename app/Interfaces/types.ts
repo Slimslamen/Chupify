@@ -1,11 +1,14 @@
 export interface IContext {
   FetchArtist: () => Promise<IArtist>;
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
+  Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
   RefreshToken: () => Promise<IRefreshToken>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
   setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
   Albums: IAlbumDataResponse | undefined;
+  Tracks: ITrack[] | undefined;
+  setTracks: React.Dispatch<React.SetStateAction<ITrack[] | undefined>>
 }
 export interface IRefreshToken {
   access_token: string;
@@ -66,21 +69,30 @@ export interface IPic {
   width: number;
 }
 
+export interface ITopTracksResponse {
+  tracks: ITrack[];
+}
 
-// export interface IUserProfile {
-//     country?: string;
-//     display_name?: string;
-//     email?: string;
-//     explicit_content?: {
-//         filter_enabled: boolean,
-//         filter_locked: boolean
-//     },
-//     external_urls: { spotify: string; };
-//     followers: { href: string; total: number; };
-//     href: string;
-//     id: string;
-//     images: IPic[];
-//     product: string;
-//     type: string;
-//     uri: string;
-// }
+export interface ITrack {
+  album: IAlbumData;
+  artists: IArtist[];
+  available_markets: string[];
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_ids?: IExternalIds;
+  external_urls?: IExternalUrls;
+  href: string;
+  id: string;
+  is_local: boolean;
+  name: string;
+  popularity: number;
+  preview_url: string | null;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
+export interface IExternalIds {
+  isrc: string;
+}
