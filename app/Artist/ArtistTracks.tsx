@@ -6,14 +6,18 @@ import { IContext } from "../Interfaces/types";
 import ArtistImage from "../(Components)/ArtistImage";
 
 export default function ArtistTracks() {
-  const [isHovering, setIsHovering] = useState<boolean>(false);
   const { Fetch5MostPopularTracks, setTracks, Tracks } = useContext(AppContext)! as IContext;
   const [ArtistLoad, setArtistLoad] = useState<boolean>(false);
+
+  function handleHover(name :string){
+    setTracks((Track) => 
+      Track?.map((item) => ({...item, IsHovered: item.name === name ? !item.IsHovered : item.IsHovered})))
+  }
 
   useEffect(() => {
     const GetSearchQuery = async () => {
       const res = await Fetch5MostPopularTracks();
-      const filteredTracks = res.tracks.slice(0, 5);
+      const filteredTracks = res.tracks.slice(0, 5).map((track) => ({...track, IsHovered:false}));
       console.log("Tracks Response:", filteredTracks);
       if (res) {
         setTracks(filteredTracks);
@@ -36,12 +40,12 @@ export default function ArtistTracks() {
         Tracks.map((track, index) => (
           <div
             key={index}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            onMouseEnter={() => handleHover(track.name)}
+            onMouseLeave={() => handleHover(track.name)}
             className={` text-TextColor flex flex-row justify-between items-center bg-componentLightGrey hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
           >
             <div className="flex flex-row items-center space-x-5">
-              {!isHovering ? <p>{index + 1}</p> : <PlayButton />}
+              {track.IsHovered == false ? <p>{index + 1}</p> : <PlayButton />}
               <div className="flex flex-row items-center text-white">
                 <div className="flex flex-row space-x-5 items-center">
                   {ArtistLoad == true ? (

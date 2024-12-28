@@ -91,6 +91,7 @@ export interface ITrack {
   track_number: number;
   type: string;
   uri: string;
+  IsHovered: boolean
 }
 
 export interface IExternalIds {
