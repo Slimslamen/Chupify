@@ -25,7 +25,7 @@ useEffect(() => {
   }, [Albums]);
 
   return (
-    <div className="bg-componentGrey rounded-lg w-[55em] h-80 flex flex-col space-y-5 overflow-x-auto">
+    <div className="bg-componentGrey rounded-lg w-[55em] pt-2 pb-10 flex flex-col space-y-5 overflow-x-auto">
       <div className="flex items-start ml-10 mt-3">
         <h2 className="text-2xl font-extrabold">Albums</h2>
       </div>
@@ -38,9 +38,9 @@ useEffect(() => {
             >
               <ArtistImage src={album.images[0].url} alt={album.name} height={140} width={140} Radius={"4px"} />
               <div className="space-y-1">
-                <h4 className="font-extrabold w-full">Forest Hills Drive</h4>
+                <h4 className="font-extrabold w-full h-11 mb-2 overflow-hidden">{album.name}</h4>
                 <div className="flex flex-row justify-between w-full items-center">
-                  <p className="text-xs">Love Yourz</p>
+                  <p className="text-xs">{album.artists[0].name}</p>
                   <FollowButton />
                 </div>
               </div>

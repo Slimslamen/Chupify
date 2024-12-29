@@ -2,13 +2,17 @@ export interface IContext {
   FetchArtist: () => Promise<IArtist>;
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
   Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
+  PlayTrack: (contextUri:IExternalUrls) => Promise<void>;
+  SearchForArtist:(name:string) => Promise<void>
   RefreshToken: () => Promise<IRefreshToken>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
   setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
   Albums: IAlbumDataResponse | undefined;
   Tracks: ITrack[] | undefined;
-  setTracks: React.Dispatch<React.SetStateAction<ITrack[] | undefined>>
+  setTracks: React.Dispatch<React.SetStateAction<ITrack[] | undefined>>;
+  Search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 export interface IRefreshToken {
   access_token: string;
@@ -55,23 +59,6 @@ export interface IAlbumDataResponse {
   total: number;
 }
 
-export interface IImage {
-  url: string;
-  height: number;
-  width: number;
-}
-export interface IExternalUrls {
-  spotify: string;
-}
-export interface IPic {
-  url: string;
-  height: number;
-  width: number;
-}
-
-export interface ITopTracksResponse {
-  tracks: ITrack[];
-}
 
 export interface ITrack {
   album: IAlbumData;
@@ -93,7 +80,35 @@ export interface ITrack {
   uri: string;
   IsHovered: boolean
 }
-
+export interface ISearchResponse {
+  artists: {
+    href: string;
+    items: IArtist[];
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    total: number;
+  };
+}
 export interface IExternalIds {
   isrc: string;
 }
+export interface IImage {
+  url: string;
+  height: number;
+  width: number;
+}
+export interface IExternalUrls {
+  spotify: string;
+}
+export interface IPic {
+  url: string;
+  height: number;
+  width: number;
+}
+
+export interface ITopTracksResponse {
+  tracks: ITrack[];
+}
+

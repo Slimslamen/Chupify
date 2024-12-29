@@ -2,12 +2,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import PlayButton from "../(Components)/Buttons/PlayButton";
 import { AppContext } from "../Context/SpotifyContext";
-import { IContext } from "../Interfaces/types";
+import { IContext, IExternalUrls } from "../Interfaces/types";
 import ArtistImage from "../(Components)/ArtistImage";
 
 export default function ArtistTracks() {
-  const { Fetch5MostPopularTracks, setTracks, Tracks } = useContext(AppContext)! as IContext;
+  const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack } = useContext(AppContext)! as IContext;
   const [ArtistLoad, setArtistLoad] = useState<boolean>(false);
+
+  const externalUrls: IExternalUrls = { spotify: "spotify:album:2EZ8JL3dtb54VXi3k6E7k6" };
 
   function handleHover(name :string){
     setTracks((Track) => 
@@ -45,7 +47,7 @@ export default function ArtistTracks() {
             className={` text-TextColor flex flex-row justify-between items-center bg-componentLightGrey hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
           >
             <div className="flex flex-row items-center space-x-5">
-              {track.IsHovered == false ? <p>{index + 1}</p> : <PlayButton />}
+              {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(externalUrls)}><PlayButton /></button>}
               <div className="flex flex-row items-center text-white">
                 <div className="flex flex-row space-x-5 items-center">
                   {ArtistLoad == true ? (
@@ -53,7 +55,7 @@ export default function ArtistTracks() {
                   ) : (
                     <p>Loading...</p>
                   )}
-                  <h3>Love Yourz</h3>
+                  <h3>{track.name}</h3>
                 </div>
               </div>
             </div>

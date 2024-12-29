@@ -1,8 +1,7 @@
 "use client";
 
 import React, { createContext, ReactNode, useState } from "react";
-import { IAlbumDataResponse, IArtist, IContext, ITrack } from "../Interfaces/types";
-
+import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, ITrack } from "../Interfaces/types";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -10,11 +9,12 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Artist, setArtist] = useState<IArtist | undefined>();
   const [Albums, setAlbums] = useState<IAlbumDataResponse | undefined>();
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
+  const [Search, setSearch] = useState<string>("");
 
   const clientId: string = "b27e34422d36480d98024631a9b2bc17";
-  const artist: string = "6qxpnaukVayrQn6ViNvu9I";
-  const Artista : string = "7HO5fOXE4gh3lzZn64tX2E";
-  
+  const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
+  const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
+
   const Token = localStorage.getItem("token");
 
   async function FetchArtist() {
@@ -29,7 +29,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       const data = await response.json();
       return data;
     } else {
-       throw new Error(`Error fetching artist albums: ${response.status}`);
+      throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
   async function FetchArtistAlbums() {
@@ -50,18 +50,57 @@ function SpotifyContext({ children }: { children: ReactNode }) {
 
   async function Fetch5MostPopularTracks() {
     const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/top-tracks`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${Token}`,
-          "Content-Type": "application/x-www-form-urlencoded",
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+  }
+
+  async function PlayTrack(contextUri: IExternalUrls) {
+    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        context_uri: contextUri,
+        offset: {
+          position: 5,
         },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error(`Error fetching artist albums: ${response.status}`);
-      }
+        position_ms: 0,
+      }),
+    });
+    if (response.ok) {
+      console.log("Ok");
+    } else {
+      throw new Error(`Error playing track: ${response.status}`);
+    }
+  }
+
+  async function SearchForArtist(name: string) {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${name}&type=artist&limit=1`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setSearch(data);
+      console.log(Search);
+      return data;
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
   }
 
   async function RefreshToken() {
@@ -71,30 +110,34 @@ function SpotifyContext({ children }: { children: ReactNode }) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        grant_type: 'refresh_token',
+        grant_type: "refresh_token",
         refresh_token: Token!,
-        client_id: clientId
-      })
+        client_id: clientId,
+      }),
     });
     if (response.ok) {
       const data = await response.json();
-        console.log(data);
+      console.log(data);
       return data;
     } else {
-        throw new Error(`Error fetching artist albums: ${response.status}`);
-      }
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
   }
   const Values: IContext = {
     FetchArtist,
     FetchArtistAlbums,
     Fetch5MostPopularTracks,
+    PlayTrack,
+    SearchForArtist,
     RefreshToken,
     Artist,
     setArtist,
     setAlbums,
     Albums,
-    Tracks, 
-    setTracks
+    Tracks,
+    setTracks,
+    Search, 
+    setSearch
   };
   return (
     <>
