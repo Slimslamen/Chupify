@@ -1,9 +1,9 @@
 export interface IContext {
+  SearchForArtist:(name:string) => Promise<string>
   FetchArtist: () => Promise<IArtist>;
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
   Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
   PlayTrack: (contextUri:IExternalUrls) => Promise<void>;
-  SearchForArtist:(name:string) => Promise<void>
   RefreshToken: () => Promise<IRefreshToken>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
@@ -11,8 +11,8 @@ export interface IContext {
   Albums: IAlbumDataResponse | undefined;
   Tracks: ITrack[] | undefined;
   setTracks: React.Dispatch<React.SetStateAction<ITrack[] | undefined>>;
-  Search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  SearchedArtist: string | undefined;
+  setSearchedArtist: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 export interface IRefreshToken {
   access_token: string;
@@ -107,7 +107,6 @@ export interface IPic {
   height: number;
   width: number;
 }
-
 export interface ITopTracksResponse {
   tracks: ITrack[];
 }

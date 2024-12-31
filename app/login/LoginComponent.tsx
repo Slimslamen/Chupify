@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Token } from "../Token";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginComponent() {
   const [AccessToken, setAccessToken] = useState<string>("")
+  const router = useRouter();
   
   useEffect(() => {
     const fetchToken = async () => {
@@ -15,12 +17,19 @@ export default function LoginComponent() {
     };
     fetchToken();
   }, [])
+
+  function NavigateToMainPage(e : any){
+    e.preventDefault();
+    getStaticProps()
+    router.push("/pages/index");
+    router.forward();
+  }
   
   return (
     <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
       <h1>Insert Your Spotify Client-Id</h1>
       <p>b27e34422d36480d98024631a9b2bc17</p>
-      <form className="w-full flex flex-col items-center justify-center space-y-8">
+      <form className="w-full flex flex-col items-center justify-center space-y-8" onSubmit={(e) => NavigateToMainPage(e)}>
         <div className="w-[69%] flex flex-row gap-1 bg-white/80 rounded-md py-1 px-1">
           <svg viewBox="0 0 344 384" height="26.72093023255814" width="24">
             <path
@@ -30,7 +39,7 @@ export default function LoginComponent() {
           </svg>
           <input id="" name="" type="text" className="w-full text-black bg-inherit focus:outline-none pl-1" />
         </div>
-        <Link onClick={() => getStaticProps()} href={{pathname:"/pages/index"}} className="btn">
+        <Link type="submit" href={{pathname:"/pages/index"}} className="btn">
           Login
         </Link>
       </form>

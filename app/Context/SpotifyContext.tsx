@@ -9,7 +9,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Artist, setArtist] = useState<IArtist | undefined>();
   const [Albums, setAlbums] = useState<IAlbumDataResponse | undefined>();
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
-  const [Search, setSearch] = useState<string>("");
+  const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
 
   const clientId: string = "b27e34422d36480d98024631a9b2bc17";
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
@@ -63,6 +63,23 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
+  async function SearchForArtist(name: string) {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${name}&type=artist&limit=1`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const filteredData = data.artists.items[0].id;
+      setSearchedArtist(filteredData);
+      console.log("filter" + SearchedArtist);
+      return data;
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+  }
 
   async function PlayTrack(contextUri: IExternalUrls) {
     const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
@@ -83,23 +100,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       console.log("Ok");
     } else {
       throw new Error(`Error playing track: ${response.status}`);
-    }
-  }
-
-  async function SearchForArtist(name: string) {
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${name}&type=artist&limit=1`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${Token}`,
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setSearch(data);
-      console.log(Search);
-      return data;
-    } else {
-      throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
 
@@ -127,8 +127,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     FetchArtist,
     FetchArtistAlbums,
     Fetch5MostPopularTracks,
-    PlayTrack,
     SearchForArtist,
+    PlayTrack,
     RefreshToken,
     Artist,
     setArtist,
@@ -136,8 +136,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     Albums,
     Tracks,
     setTracks,
-    Search, 
-    setSearch
+    SearchedArtist,
+    setSearchedArtist,
   };
   return (
     <>

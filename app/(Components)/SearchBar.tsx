@@ -1,16 +1,17 @@
 'use client'
+
 import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "../Interfaces/types";
 
 export default function SearchBar() {
 
-  const [ArtistSearch, setArtistSearch] = useState<string>("")
+  const [Search, setSearch] = useState<string>("")
   const { SearchForArtist } = useContext(AppContext)! as IContext;
 
   async function handleSubmit(e : React.FormEvent){
     e.preventDefault();
-    const res = await SearchForArtist(ArtistSearch)
+    const res = await SearchForArtist(Search)
     console.log(res)
   }
   return (
@@ -43,8 +44,8 @@ export default function SearchBar() {
           id="name"
           type="search"
           name="name"
-          value={ArtistSearch}
-          onChange={(e) => setArtistSearch(e.target.value)}
+          value={Search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </form>
     </div>
