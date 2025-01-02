@@ -4,12 +4,11 @@ import PlayButton from "../(Components)/Buttons/PlayButton";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext, IExternalUrls } from "../Interfaces/types";
 import ArtistImage from "../(Components)/ArtistImage";
-import ArtistSkeleton from "../(Components)/Skeletons/ArtistSkeleton";
 import TrackSkeleton from "../(Components)/Skeletons/TrackSkeleton";
 
 export default function ArtistTracks() {
   const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack } = useContext(AppContext)! as IContext;
-  const [ArtistLoad, setArtistLoad] = useState<boolean>(false);
+  const [TrackLoad, setTrackLoad] = useState<boolean>(false);
 
   const externalUrls: IExternalUrls = { spotify: "spotify:album:2EZ8JL3dtb54VXi3k6E7k6" };
 
@@ -34,14 +33,14 @@ export default function ArtistTracks() {
   useEffect(() => {
     if (Tracks) {
       console.log("Updated Tracks state: ", Tracks);
-      setArtistLoad(false);
+      setTrackLoad(true);
     }
   }, [Tracks]);
 
   return (
     <div className="h-[17.5em] rounded-md flex flex-col py-6 space-y-4">
-      {ArtistLoad == true ? (
-        <div>
+      {TrackLoad ? (
+        <div className="space-y-4">
           {Tracks &&
             Tracks.map((track, index) => (
               <div

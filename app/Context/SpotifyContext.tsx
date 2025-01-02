@@ -102,6 +102,23 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error playing track: ${response.status}`);
     }
   }
+  async function SaveAlbumToLibrary(AlbumId : string) {
+    const response = await fetch(`https://api.spotify.com/v1/me/albums?ids=${AlbumId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ids: AlbumId
+      })
+    });
+    if (response.ok) {
+      console.log("Ok");
+    } else {
+      throw new Error(`Error playing track: ${response.status}`);
+    }
+  }
 
   async function RefreshToken() {
     const response = await fetch(`https://accounts.spotify.com/api/token`, {
@@ -129,6 +146,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     Fetch5MostPopularTracks,
     SearchForArtist,
     PlayTrack,
+    SaveAlbumToLibrary,
     RefreshToken,
     Artist,
     setArtist,

@@ -6,9 +6,9 @@ import { IContext } from "../Interfaces/types";
 import AlbumSkeleton from "../(Components)/Skeletons/AlbumSkeleton";
 
 export default function Albums() {
-  const { FetchArtistAlbums, setAlbums, Albums } = useContext(AppContext)! as IContext;
+  const { FetchArtistAlbums, setAlbums, Albums, SaveAlbumToLibrary } = useContext(AppContext)! as IContext;
 
-  const [ArtistLoad, setArtistLoad] = useState<boolean>(false);
+  const [AlbumLoad, setAlbumLoad] = useState<boolean>(false);
 
   useEffect(() => {
     const GetSearchQuery = async () => {
@@ -24,18 +24,18 @@ export default function Albums() {
 useEffect(() => {
     if (Albums) {
       console.log("Updated Albums state: ", Albums);
-      setArtistLoad(false)
+      setAlbumLoad(true)
     }
   }, [Albums]);
 
   return (
-    <div className="bg-componentGrey rounded-lg w-[55em] pt-2 pb-10 flex flex-col space-y-5 overflow-x-auto">
+    <div className="bg-componentGrey rounded-lg w-[55em] pt-2 pb-10 space-y-5 overflow-x-auto">
       <div className="flex items-start ml-10 mt-3">
         <h2 className="text-2xl font-extrabold">Albums</h2>
       </div>
-      <div className="flex flex-row w-full justify-around">
-        {ArtistLoad == true ? (
-          <div>
+      <div className="flex items-center w-full justify-around">
+        {AlbumLoad ? (
+          <div className="flex flex-row space-x-12">
             {Albums &&
               Albums.items.map((album, index) => (
                 <div
@@ -47,7 +47,7 @@ useEffect(() => {
                     <h4 className="font-extrabold w-full h-11 mb-2 overflow-hidden">{album.name}</h4>
                     <div className="flex flex-row justify-between w-full items-center">
                       <p className="text-xs">{album.artists[0].name}</p>
-                      <FollowButton />
+                      <button onClick={() => SaveAlbumToLibrary(album.id)}><FollowButton /></button>
                     </div>
                   </div>
                 </div>

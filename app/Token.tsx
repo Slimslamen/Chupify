@@ -8,7 +8,12 @@ export async function Token() {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
+        body: new URLSearchParams({
+          grant_type: "client_credentials",
+          client_id: clientId,
+          client_secret: clientSecret,
+          scope: "user-library-modify user-modify-playback-state"
+        }).toString() // `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
     })
     if(response.ok){
         const data = (await response.json());

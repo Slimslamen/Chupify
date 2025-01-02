@@ -6,7 +6,6 @@ import NavbarComponent from "../NavbarFolder/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
-import ArtistSkeleton from "../(Components)/Skeletons/ArtistSkeleton";
 
 export default function MainComponent() {
   const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;

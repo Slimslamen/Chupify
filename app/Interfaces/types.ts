@@ -4,6 +4,7 @@ export interface IContext {
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
   Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
   PlayTrack: (contextUri:IExternalUrls) => Promise<void>;
+  SaveAlbumToLibrary:(AlbumId:string) => Promise<void>;
   RefreshToken: () => Promise<IRefreshToken>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
