@@ -11,7 +11,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
 
-  const clientId: string = "b27e34422d36480d98024631a9b2bc17";
+  const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 
@@ -102,7 +102,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error playing track: ${response.status}`);
     }
   }
-  async function SaveAlbumToLibrary(AlbumId : string) {
+  async function SaveAlbumToLibrary(AlbumId: string) {
     const response = await fetch(`https://api.spotify.com/v1/me/albums?ids=${AlbumId}`, {
       method: "PUT",
       headers: {
@@ -110,8 +110,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ids: AlbumId
-      })
+        ids: AlbumId,
+      }),
     });
     if (response.ok) {
       console.log("Ok");
@@ -140,6 +140,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
+  
   const Values: IContext = {
     FetchArtist,
     FetchArtistAlbums,

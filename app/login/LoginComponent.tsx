@@ -1,35 +1,53 @@
-'use client'
+"use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Token } from "../Token";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
 export default function LoginComponent() {
-  const [AccessToken, setAccessToken] = useState<string>("")
-  const router = useRouter();
-  
-  useEffect(() => {
-    const fetchToken = async () => {
-      const token = await getStaticProps();
-      setAccessToken(token.access_token);
-    };
-    fetchToken();
-  }, [])
+  const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-  function NavigateToMainPage(e : any){
+  const router = useRouter();
+
+  useEffect(() => {
+    Token();
+  }, []);
+
+  async function NavigateToSpotifyAuth(e : any) {
     e.preventDefault();
-    getStaticProps()
-    router.push("/pages/index");
-    router.forward();
+    const params = {
+      client_id: clientId!,
+      response_type: "code",
+      redirect_uri: "http://localhost:3000/pages/index",
+      scope: "user-library-modify user-modify-playback-state playlist-modify-private",
+    };
+    const queryParam = new URLSearchParams(params).toString()
+    
+    const Url = `https://accounts.spotify.com/authorize?${queryParam}`;
+    const response = await fetch(Url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      }
+    });
+    if (response.ok) {
+      router.push(Url);
+      console.log("Url",Url)
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+    console.log(Url);
   }
-  
+
   return (
     <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
       <h1>Insert Your Spotify Client-Id</h1>
       <p>b27e34422d36480d98024631a9b2bc17</p>
-      <form className="w-full flex flex-col items-center justify-center space-y-8" onSubmit={(e) => NavigateToMainPage(e)}>
+      <form
+        className="w-full flex flex-col items-center justify-center space-y-8"
+        onSubmit={(e) => NavigateToSpotifyAuth(e)}
+      >
         <div className="w-[69%] flex flex-row gap-1 bg-white/80 rounded-md py-1 px-1">
           <svg viewBox="0 0 344 384" height="26.72093023255814" width="24">
             <path
@@ -39,16 +57,10 @@ export default function LoginComponent() {
           </svg>
           <input id="" name="" type="text" className="w-full text-black bg-inherit focus:outline-none pl-1" />
         </div>
-        <Link type="submit" href={{pathname:"/pages/index"}} className="btn">
+        <button type="submit" className="btn">
           Login
-        </Link>
+        </button>
       </form>
     </div>
   );
-}
-
-
- async function getStaticProps() {
- const response = Token();
- return response;
 }
