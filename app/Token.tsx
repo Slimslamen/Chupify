@@ -1,8 +1,8 @@
 
 export async function Token() {
 
-  const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
-   const clientSecret:string | undefined = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
+   const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string;
  
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: "POST",
