@@ -27,6 +27,28 @@ export async function Token() {
     }
 }
 
-export async function POST(){
+ export async function NavigateToSpotifyAuth(e: any) {
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
+    e.preventDefault();
+    const params = {
+      client_id: clientId!,
+      response_type: "code",
+      redirect_uri: "http://localhost:3000/pages/index",
+      scope: "user-library-modify user-modify-playback-state playlist-modify-private",
+    };
+    const queryParam = new URLSearchParams(params).toString()
 
-}
+    const Url = `https://accounts.spotify.com/authorize?${queryParam}`;
+    const response = await fetch(Url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      }
+    });
+    if (response.ok) {
+      console.log("Url", Url)
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+    console.log(Url);
+  }
