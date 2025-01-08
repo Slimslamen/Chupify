@@ -1,37 +1,41 @@
 "use client";
 
-import { Token } from "../Token";
-import { useEffect } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next"
+import { getProviders, signIn } from "next-auth/react"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
 
-export default function LoginComponent() {
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    Token();
-  }, []);
-
+export default function LoginComponent({
+  providers,
+}: InferGetServerSidePropsType<typeof getServerSideProps>)  {
   return (
-    <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
-      {session ?
-        <form
-          className="w-full flex flex-col items-center justify-center space-y-8"
-          onSubmit={() => signOut()}
-        >
-          <button type="submit" className="btn">
-            Sign out
+    <>
+      {Object.values(providers).map((provider) => (
+        <div key={provider.name}>
+          <button onClick={() => signIn(provider.id)}>
+            Sign in with {provider.name}
           </button>
-        </form>
-        :
-        <form
-          className="w-full flex flex-col items-center justify-center space-y-8"
-          onSubmit={() => signIn()}
-        >
-          <button type="submit" className="btn">
-            Sign in with Spotify
-          </button>
-        </form>
-      }
-    </div>
-  );
+        </div>
+      ))}
+    </>
+  )
+}
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  // If the user is already logged in, redirect.
+  // Note: Make sure not to redirect to the same page
+  // To avoid an infinite loop!
+  if (session) {
+    return { redirect: { destination: "/pages/index" } }
+  }
+
+  const providers = await getProviders()
+
+  return {
+    props: { providers: providers ?? [] },
+  }
 }

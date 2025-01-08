@@ -15,7 +15,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 
-  const Token = localStorage.getItem("token");
+  const Token = localStorage.getItem("refresh_token");
 
   async function FetchArtist() {
     const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
@@ -128,8 +128,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       },
       body: new URLSearchParams({
         grant_type: "refresh_token",
-        refresh_token: Token!,
-        client_id: clientId,
+        refresh_token: Token || "",
+        client_id: clientId || "",
       }),
     });
     if (response.ok) {
