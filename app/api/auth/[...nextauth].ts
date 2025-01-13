@@ -1,4 +1,3 @@
-import { access } from "fs";
 import NextAuth from "next-auth"
 import SpotifyProvider from "next-auth/providers/spotify";
 
@@ -36,25 +35,42 @@ async function refreshAccessToken(token: any){
     }
 }
 
+const scopes = [
+    "user-library-modify",
+    "playlist-modify-private",
+    "playlist-modify-public",
+    "streaming",
+    "user-read-email",
+].join(',')
+
+const params = {
+    scope: scopes
+}
+
+const queryParams = new URLSearchParams(params);
+
+const LOGIN_URL = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+
 export const authOptions = {
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
       clientId: process.env.NEXT_PUBLIC_CLIENT_ID as string,
-      clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET as string
+      clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET as string,
+      authorization: LOGIN_URL
     })
   ],
   secret: process.env.JWT_SECRET,
   pages: {
-    signIn: '/'
+    signIn: '/pages/index'
   },
   callbacks: {
     async jwt({ token, account, user }: { token: any, account: any, user: any }) {
-      // Persist the OAuth access_token to the token right after signin
+      
       if (account && user) {
-        token.accessToken = account.access_token,
-        token.refreshToken = account.refresh_token,
-        token.accessTokenExpires = account.expires_in * 1000
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.accessTokenExpires = account.expires_at*1000;
       }
       if(Date.now() < token.accessTokenExpires)
        {
@@ -64,11 +80,10 @@ export const authOptions = {
        console.log("Token is expired")
        return await refreshAccessToken(token)
     },
-    async session({ session, token }: { session: any, token: any }) {
-      // Send properties to the client, like an access_token from a provider.
-      session.user.accessToken = token.accessToken
-      session.user.refresh_token = token.refresh_token
-      return session
+    async session({ session, token }: { session: any, token: any }){
+        session.user.access_token = token.accessToken;
+        session.refresh_token = token.refresh_token;
+        return session;
     }
   }
 }
