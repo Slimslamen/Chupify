@@ -4,7 +4,7 @@ import type {
 } from "next"
 import { getProviders, signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../api/auth/[...nextauth]/route"
+import { authOptions } from "./api/auth/[...nextauth]"
 
 export default function SignIn({
   providers,
@@ -29,7 +29,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // Note: Make sure not to redirect to the same page
   // To avoid an infinite loop!
   if (session) {
-    return { redirect: { destination: "/pages/spotify" } }
+    return { redirect: { destination: "/pages/spotify/index" } }
   }
 
   const providers = await getProviders()
