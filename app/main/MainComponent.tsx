@@ -2,7 +2,7 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "@/app/Interfaces/types";
-import NavbarComponent from "../NavbarFolder/NavbarComponent";
+import NavbarComponent from "../(Components)/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";

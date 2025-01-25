@@ -1,6 +1,6 @@
 import React from 'react'
-import Logo from '../(Components)/Logo'
-import SearchBar from '../(Components)/SearchBar'
+import Logo from './Logo'
+import SearchBar from './SearchBar'
 
 export default function NavbarComponent() {
   return (
