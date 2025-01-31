@@ -1,42 +1,20 @@
-// "use client";
+"use client";
 
-// import type {
-//   GetServerSidePropsContext,
-//   InferGetServerSidePropsType,
-// } from "next"
-// import { getProviders, signIn } from "next-auth/react"
-// import { getServerSession } from "next-auth/next"
-// import { authOptions } from "../api/auth/[...nextauth]"
+import { useRouter } from "next/navigation";
 
-// export default function LoginComponent({
-//   providers,
-// }: InferGetServerSidePropsType<typeof getServerSideProps>)  {
-//   return (
-//     <>
-//       {Object.values(providers).map((provider) => (
-//         <div key={provider.name}>
-//           <button onClick={() => signIn(provider.id)}>
-//             Sign in with {provider.name}
-//           </button>
-//         </div>
-//       ))}
-//     </>
-//   )
-// }
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//   const session = await getServerSession(context.req, context.res, authOptions)
+export default function LoginComponent() {
+  const router = useRouter();
 
-//   // If the user is already logged in, redirect.
-//   // Note: Make sure not to redirect to the same page
-//   // To avoid an infinite loop!
-//   if (session) {
-//     return { redirect: { destination: "/pages/index" } }
-//   }
+  const SpotifyAuth = (e : any) => {
+    e.preventDefault()
+    router.push("/pages/api/auth/login"); // Use router.push to navigate to the login URL
+  };
 
-//   const providers = await getProviders()
-//   console.log(providers);
-
-//   return {
-//     props: { providers: providers ?? [] },
-//   }
-// }
+  return (
+    <div className="w-[30em] mx-auto mt-48 rounded-lg bg-componentGrey h-64  flex items-center justify-center flex-col space-y-3">
+      <button onClick={(e) => SpotifyAuth(e)} className="btn" nonce={process.env.NEXT_PUBLIC_CLIENT_ID}>
+        Sign in with Spotify
+      </button>
+    </div>
+  );
+}
