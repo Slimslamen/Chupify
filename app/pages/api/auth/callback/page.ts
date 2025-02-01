@@ -1,22 +1,19 @@
-
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
+import { SetCookies } from "../../SetCookies";
 
 
-export default async function Page({ searchParams, res } : any) {
-  const Cookies = cookies();
+export default async function GET({ searchParams } : any) {
+    const CookieStore = await cookies();
     const code = (await searchParams).code;
 
     if (!code) {
       return NextResponse.json({ error: "Authorization code not found" }, { status: 400 });
     }
 
-    const data: { [key: string]: string } = { grant_type: "authorization_code", code: code, redirect_uri: "http://localhost:3000/pages/api/auth/callback"};
-    console.log(data);
-
-    console.log(JSON.stringify(data));
-
+  //Creating the parameters for the request, then encoding every key and its' value in URI format and concatenating it, to then send it in the request body
+  const data: { [key: string]: string } = { grant_type: "authorization_code", code: code, redirect_uri: "http://localhost:3000/pages/api/auth/callback"};
   const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -33,9 +30,11 @@ export default async function Page({ searchParams, res } : any) {
   var TokenRes;
   if(response.ok)
   {
+    TokenRes = await response.json();
+
+    SetCookies(TokenRes);
+    
     redirect("/pages/api/chupify");
-    // res.writeHead(302, { Location: '/blablae' });
-    //  res.end();
 
   }
     else{

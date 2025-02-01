@@ -11,13 +11,16 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
 
+
   const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 
   const Token = localStorage.getItem("refresh_token");
+  console.log("Tes",Token);
 
   async function FetchArtist() {
+    console.log("Test",Token);
     const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
       method: "GET",
       headers: {

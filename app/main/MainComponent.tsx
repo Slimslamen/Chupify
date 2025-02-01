@@ -11,7 +11,6 @@ export default function MainComponent() {
   const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
-    console.log("Helu")
     const GetSearchQuery = async () => {
       const res = await FetchArtist();
       if (res) {
