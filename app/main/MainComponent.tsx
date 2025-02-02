@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import { useContext, useEffect } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "@/app/Interfaces/types";
@@ -6,18 +7,27 @@ import NavbarComponent from "../(Components)/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
+import { AccessCookies } from "../pages/api/Cookies";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist } = useContext(AppContext)! as IContext;
-
+  const { FetchArtist, setArtist, Artist, GetCookies } = useContext(AppContext)! as IContext;
+  
   useEffect(() => {
+    const CallOnCookie = async () => {
+      const token = await AccessCookies();
+      if (token) {
+        GetCookies(token); // Pass the token value directly
+      }
+    };
+
     const GetSearchQuery = async () => {
       const res = await FetchArtist();
       if (res) {
         setArtist(res);
       }
-      //RefreshToken();
     };
+
+    CallOnCookie();
     GetSearchQuery();
   }, []);
   

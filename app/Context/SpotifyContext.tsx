@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, ReactNode, useState } from "react";
-import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, ITrack } from "../Interfaces/types";
+import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, IRefreshToken, ITrack } from "../Interfaces/types";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -10,17 +11,21 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Albums, setAlbums] = useState<IAlbumDataResponse | undefined>();
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
+  const [Token, setToken] = useState<string | undefined>();
 
 
   const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 
-  const Token = localStorage.getItem("refresh_token");
-  console.log("Tes",Token);
+
+  async function GetCookies(token: RequestCookie) {
+    console.log("Token: ", token); // This will log to the browser's console
+    setToken(token.value);
+  }
 
   async function FetchArtist() {
-    console.log("Test",Token);
+ 
     const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
       method: "GET",
       headers: {
@@ -130,9 +135,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: Token || "",
-        client_id: clientId || "",
       }),
     });
     if (response.ok) {
@@ -145,6 +147,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   }
   
   const Values: IContext = {
+    GetCookies,
     FetchArtist,
     FetchArtistAlbums,
     Fetch5MostPopularTracks,
@@ -160,6 +163,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     setTracks,
     SearchedArtist,
     setSearchedArtist,
+    Token,
+    setToken
   };
   return (
     <>

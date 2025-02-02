@@ -1,3 +1,4 @@
+'use client'
 import React, { useContext, useEffect, useState } from "react";
 import ArtistTracks from "./ArtistTracks";
 import ArtistImage from "../(Components)/ArtistImage";

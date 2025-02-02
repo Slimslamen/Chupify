@@ -1,4 +1,7 @@
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+
 export interface IContext {
+  GetCookies: (token:RequestCookie) => Promise<void>;
   SearchForArtist:(name:string) => Promise<string>
   FetchArtist: () => Promise<IArtist>;
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;
@@ -14,7 +17,10 @@ export interface IContext {
   setTracks: React.Dispatch<React.SetStateAction<ITrack[] | undefined>>;
   SearchedArtist: string | undefined;
   setSearchedArtist: React.Dispatch<React.SetStateAction<string | undefined>>;
+  Token: string | undefined;
+  setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
+
 export interface IRefreshToken {
   access_token: string;
   token_type: string;

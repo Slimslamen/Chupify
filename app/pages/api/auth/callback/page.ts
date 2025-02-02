@@ -1,11 +1,10 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
-import { SetCookies } from "../../SetCookies";
+import SetCookies from "../../SetCookies";
+
 
 
 export default async function GET({ searchParams } : any) {
-    const CookieStore = await cookies();
     const code = (await searchParams).code;
 
     if (!code) {
@@ -31,9 +30,7 @@ export default async function GET({ searchParams } : any) {
   if(response.ok)
   {
     TokenRes = await response.json();
-
-    SetCookies(TokenRes);
-    
+    await SetCookies(TokenRes);
     redirect("/pages/api/chupify");
 
   }
