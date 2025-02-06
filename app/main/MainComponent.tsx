@@ -7,19 +7,16 @@ import NavbarComponent from "../(Components)/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
-import { AccessCookies } from "../pages/api/Cookies";
+import { fetchToken } from "../pages/api/Cookies";
 
 export default function MainComponent() {
   const { FetchArtist, setArtist, Artist, GetCookies } = useContext(AppContext)! as IContext;
-  
-  useEffect(() => {
-    const CallOnCookie = async () => {
-      const token = await AccessCookies();
-      if (token) {
-        GetCookies(token); // Pass the token value directly
-      }
-    };
 
+  useEffect(() => {
+      fetchToken();
+  }, []);
+
+  useEffect(() => {
     const GetSearchQuery = async () => {
       const res = await FetchArtist();
       if (res) {
@@ -27,7 +24,7 @@ export default function MainComponent() {
       }
     };
 
-    CallOnCookie();
+    // CallOnCookie();
     GetSearchQuery();
   }, []);
   

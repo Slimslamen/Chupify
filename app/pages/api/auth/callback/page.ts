@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
-import SetCookies from "../../SetCookies";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 
-
-export default async function GET({ searchParams } : any) {
+export default async function handler({ searchParams, req, res } : { searchParams: any, req: NextApiRequest, res: NextApiResponse }) {
     const code = (await searchParams).code;
 
     if (!code) {
@@ -26,11 +26,27 @@ export default async function GET({ searchParams } : any) {
     body: formBody,
   });
 
-  var TokenRes;
   if(response.ok)
   {
-    TokenRes = await response.json();
-    await SetCookies(TokenRes);
+    console.log("res" + res)
+    const TokenRes = await response.json();
+
+    res.setHeader("Set-Cookie", cookie.serialize("refresh_token", TokenRes.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      path: "/"
+    }))
+
+    res.json({ access_token: TokenRes.access_token, expires_in: TokenRes.expires_in });
+    // await SetCookies(TokenRes);
+    // 'user server';
+    // const CookieStore = await cookies();
+    // (await cookies()).set("access_token", TokenRes.access_token, { path: "/", httpOnly: true, maxAge: TokenRes.expires_in, secure: true });
+    // (await cookies()).set("refresh_token", TokenRes.refresh_token, { path: "/", httpOnly: true, secure: true });
+    // redirect("/pages/api/chupify");
+
+     //NextResponse.json({ refresh_token: TokenRes.refresh_token, access_token: TokenRes.access_token, expires_in: TokenRes.expires_in });
+
     redirect("/pages/api/chupify");
 
   }
