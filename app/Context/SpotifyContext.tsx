@@ -2,7 +2,6 @@
 
 import React, { createContext, ReactNode, useState } from "react";
 import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, IRefreshToken, ITrack } from "../Interfaces/types";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -19,9 +18,16 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 
 
-  async function GetCookies(token: RequestCookie) {
-    console.log("Token: ", token); // This will log to the browser's console
-    setToken(token.value);
+  async function GetToken() {
+    const response = await fetch("/api/auth/callback", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log("data",data);
   }
 
   async function FetchArtist() {
@@ -147,7 +153,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   }
   
   const Values: IContext = {
-    GetCookies,
+    GetToken,
     FetchArtist,
     FetchArtistAlbums,
     Fetch5MostPopularTracks,

@@ -1,7 +1,6 @@
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export interface IContext {
-  GetCookies: (token:RequestCookie) => Promise<void>;
+  GetToken: () => Promise<void>;
   SearchForArtist:(name:string) => Promise<string>
   FetchArtist: () => Promise<IArtist>;
   FetchArtistAlbums: () => Promise<IAlbumDataResponse>;

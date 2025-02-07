@@ -7,13 +7,12 @@ import NavbarComponent from "../(Components)/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
-import { fetchToken } from "../pages/api/Cookies";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist, GetCookies } = useContext(AppContext)! as IContext;
+  const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
-      fetchToken();
+    GetToken();
   }, []);
 
   useEffect(() => {
