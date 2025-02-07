@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import cookie from "cookie";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 
 
-export default async function handler({ searchParams, req, res } : { searchParams: any, req: NextApiRequest, res: NextApiResponse }) {
+export default async function handler({ searchParams, res } : { searchParams: any, res: NextApiResponse }) {
     const code = (await searchParams).code;
 
     if (!code) {
@@ -47,7 +46,7 @@ export default async function handler({ searchParams, req, res } : { searchParam
 
      //NextResponse.json({ refresh_token: TokenRes.refresh_token, access_token: TokenRes.access_token, expires_in: TokenRes.expires_in });
 
-    redirect("/pages/api/chupify");
+    res.redirect("/pages/api/chupify");
 
   }
     else{

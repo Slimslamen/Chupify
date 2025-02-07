@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 const Scopes = [
@@ -23,5 +24,5 @@ const Login_URL = `https://accounts.spotify.com/authorize?${new URLSearchParams(
 }).toString()}`;
 
 export async function GET() {
-    return NextResponse.redirect(Login_URL);
+    return redirect(Login_URL);
   }

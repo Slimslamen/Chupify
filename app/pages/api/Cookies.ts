@@ -18,13 +18,13 @@
 //   } 
 
  export async function fetchToken(){
-        const response = await fetch("/pages/api/auth/callback", {
+        const response = await fetch("/api/auth/callback", {
           method: "GET",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
         });
-        console.log("data",response);
         const data = await response.json();
+        console.log("data",data);
       }
