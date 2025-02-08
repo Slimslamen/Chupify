@@ -47,7 +47,7 @@ export default function ArtistTracks() {
                 className={` text-TextColor flex flex-row justify-between items-center bg-componentLightGrey hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
               >
                 <div className="flex flex-row items-center space-x-5">
-                  {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(track.album.uri)}><PlayButton /></button>}
+                  {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(track.uri)}><PlayButton /></button>}
                   <div className="flex flex-row items-center text-white">
                     <div className="flex flex-row space-x-5 items-center">
                         <ArtistImage src={track.album.images[0].url} alt={track.album.name} height={48} width={48} Radius={"4px"} />

@@ -114,10 +114,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        context_uri: contextUri,
-        offset: {
-          position: 5,
-        },
+        uris: [contextUri],
         position_ms: 0,
       }),
     });
