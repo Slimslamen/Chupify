@@ -2,12 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
-    //console.log("🔍 Redirected URL:", url.href); // Debugging
-
     const code = url.searchParams.get("code");
-    //console.log("🔑 Received code:", code); // Should print the Spotify code
-
-
+    
     // If no code is provided, it will run a loop 1 sec at a time until a code is provided
     if (!code) {
         while (!code) {

@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import PlayButton from "../(Components)/Buttons/PlayButton";
 import { AppContext } from "../Context/SpotifyContext";
-import { IContext, IExternalUrls } from "../Interfaces/types";
+import { IContext } from "../Interfaces/types";
 import ArtistImage from "../(Components)/ArtistImage";
 import TrackSkeleton from "../(Components)/Skeletons/TrackSkeleton";
 
@@ -10,7 +10,6 @@ export default function ArtistTracks() {
   const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack } = useContext(AppContext)! as IContext;
   const [TrackLoad, setTrackLoad] = useState<boolean>(false);
 
-  const externalUrls: IExternalUrls = { spotify: "spotify:album:2EZ8JL3dtb54VXi3k6E7k6" };
 
   function handleHover(name :string){
     setTracks((Track) => 
@@ -21,10 +20,8 @@ export default function ArtistTracks() {
     const GetSearchQuery = async () => {
       const res = await Fetch5MostPopularTracks();
       const filteredTracks = res.tracks.slice(0, 5).map((track) => ({...track, IsHovered:false}));
-      console.log("Tracks Response:", filteredTracks);
       if (res) {
         setTracks(filteredTracks);
-        console.log("Tracks:" + Tracks);
       }
     };
     GetSearchQuery();
@@ -32,13 +29,13 @@ export default function ArtistTracks() {
 
   useEffect(() => {
     if (Tracks) {
-      console.log("Updated Tracks state: ", Tracks);
       setTrackLoad(true);
     }
+    console.log(Tracks)
   }, [Tracks]);
 
   return (
-    <div className="h-[17.5em] rounded-md flex flex-col py-6 space-y-4">
+    <div className="h-[17.5em] rounded-md flex flex-col py-6">
       {TrackLoad ? (
         <div className="space-y-4">
           {Tracks &&
@@ -50,7 +47,7 @@ export default function ArtistTracks() {
                 className={` text-TextColor flex flex-row justify-between items-center bg-componentLightGrey hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
               >
                 <div className="flex flex-row items-center space-x-5">
-                  {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(externalUrls)}><PlayButton /></button>}
+                  {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(track.album.uri)}><PlayButton /></button>}
                   <div className="flex flex-row items-center text-white">
                     <div className="flex flex-row space-x-5 items-center">
                         <ArtistImage src={track.album.images[0].url} alt={track.album.name} height={48} width={48} Radius={"4px"} />

@@ -30,12 +30,12 @@ export default function MainComponent() {
 
   return (
     <div>
-      <div className="space-y-8 ml-12 z-0">
+      <div className="space-y-12 ml-12 z-0">
         <NavbarComponent />
         <ArtistComponent />
         <Albums />
       </div>
-      <div className="fixed h-[33em] top-0 right-0 z-10">
+      <div className="fixed h-[36em] top-0 right-0 z-10">
         <Artists />
       </div>
     </div>

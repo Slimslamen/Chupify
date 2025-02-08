@@ -24,7 +24,6 @@ export default function Albums() {
 
 useEffect(() => {
     if (Albums) {
-      console.log("Updated Albums state: ", Albums);
       setAlbumLoad(true)
     }
   }, [Albums]);

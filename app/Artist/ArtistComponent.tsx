@@ -18,7 +18,7 @@ export default function ArtistComponent() {
   }, [Artist]);
 
   return (
-    <div className="bg-componentGrey rounded-lg w-[55em] h-[38em] py-5 px-8">
+    <div className="bg-componentGrey rounded-lg w-[55em] h-[40em] py-5 px-8">
       <div className="flex flex-row items-center justify-between">
         <div>
           {ArtistLoad ? (
