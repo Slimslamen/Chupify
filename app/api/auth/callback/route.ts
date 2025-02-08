@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
-    console.log("🔍 Redirected URL:", url.href); // Debugging
+    //console.log("🔍 Redirected URL:", url.href); // Debugging
 
     const code = url.searchParams.get("code");
-    console.log("🔑 Received code:", code); // Should print the Spotify code
+    //console.log("🔑 Received code:", code); // Should print the Spotify code
 
 
     // If no code is provided, it will run a loop 1 sec at a time until a code is provided
@@ -42,8 +42,8 @@ export async function GET(req: NextRequest) {
 
         const TokenResponse = NextResponse.redirect("http://localhost:3000/api/chupify");
 
-        TokenResponse.cookies.set("access_token", TokenRes.access_token, { httpOnly: true, maxAge: TokenRes.expires_in });
-        TokenResponse.cookies.set("refresh_token", TokenRes.refresh_token, { httpOnly: true, secure: true });
+        TokenResponse.cookies.set("access_token", TokenRes.access_token, { httpOnly: true, maxAge: TokenRes.expires_in, path: "/" });
+        TokenResponse.cookies.set("refresh_token", TokenRes.refresh_token, { httpOnly: true, secure: true, path:"/" });
 
         return TokenResponse;
 

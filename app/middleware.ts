@@ -1,20 +1,35 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  // Example: Check for a specific header or cookie (e.g., an authentication token)
-  const token = req.cookies.get('spotify_token');
+  const refreshToken = req.cookies.get("refresh_token");
 
-  if (!token) {
+  console.log("!!!!!!!COOKIE!!!!!!!",refreshToken)
+
+  if (!refreshToken) {
     // Redirect to login page if no token is present
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+    return NextResponse.redirect(new URL("/login", req.url));
+  } else if (refreshToken) {
+    // Attach token to request headers
+    const requestHeaders = new Headers(req.headers);
 
-  if(req.url === '/api/auth/callback') {
-    return NextResponse.json({Token : token}, { status: 200 });
+    console.log("!!!!!!HEADER!!!!!!!!!", requestHeaders);
+
+    requestHeaders.set("Authorization", `Bearer ${refreshToken}`);
+
+    console.log("!!!!!!NEW HEADER!!!!!!!!!", requestHeaders);
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
+  if (!req.nextUrl.pathname.startsWith("/api/auth") && !refreshToken) {
+    return NextResponse.redirect("http://localhost:3000/login");
+  }
+  return NextResponse.next();
 }
 
-// Optional: You can specify which routes the middleware should apply to
 export const config = {
-  matcher: ['/api/auth/callback'], // Adjust the path as needed
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
 };

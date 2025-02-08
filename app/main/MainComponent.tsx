@@ -9,13 +9,8 @@ import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist, GetToken, Token } = useContext(AppContext)! as IContext;
-
-  useEffect(() => {
-    GetToken();
-    console.log("Token: ", Token);
-  }, []);
-
+  const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
+  
   useEffect(() => {
     const GetSearchQuery = async () => {
       const res = await FetchArtist();
@@ -23,8 +18,7 @@ export default function MainComponent() {
         setArtist(res);
       }
     };
-
-    // CallOnCookie();
+    GetToken()
     GetSearchQuery();
   }, []);
   

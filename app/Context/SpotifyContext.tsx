@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, ITrack } from "../Interfaces/types";
 
 const AppContext = createContext<IContext | null>(null);
@@ -14,28 +14,28 @@ function SpotifyContext({ children }: { children: ReactNode }) {
 
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
-
+  const Token2 = "BQAL2hMch_sUSuV0t6PIpPeW7tKKPVq7ayZLfh8CsLKEPtG-Ef7HXiiTiakJEpCZjqEVt_dZEJX7Qb8ax4LeGrh3g6FOE-MC9-nzz2aAXN5yLzw8270zlFR4w-I14NN6gbb7cFHAxmt4Xpzb8-pPPGExC9onipsYUTZ7vBFQuZbO0bIqNWUrX7mRa-x1Ko2bYZtbnGOAQogTAvkWqrVh5yS4ktQeDLtrhsijJvLps-lYtxQpdG1ZXAGjWhmXFlaleZL3K994QAx87kIr3pGhljoDTj2PwKkQUFnaKwut2q-2XbKtUCPomSCsQC9P8wCY";
 
   async function GetToken() {
-    const response = await fetch("/middleware", {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    setToken(data.Token);
-    console.log(data.Token);
+        const res = await fetch("/api/auth/token", { credentials: "include" });
+        if (res.ok) {
+          const data = await res.json();
+          console.log("REs data:", data);
+          setToken(data.access_token);
+        }
   }
 
   async function FetchArtist() {
- 
+    if (!Token) {
+      await GetToken();
+      console.log("Fetch Artist Token " + Token)
+    }
+    console.log("HMMMMMMMMMMMMMM " + Token)
     const response = await fetch(`https://api.spotify.com/v1/artists/${Artista}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${Token}`,
-        "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${Token}`,
+      "Content-Type": "application/x-www-form-urlencoded",
       },
     });
     if (response.ok) {
@@ -46,6 +46,9 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     }
   }
   async function FetchArtistAlbums() {
+    if (!Token) {
+      await GetToken();
+    }
     const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/albums?limit=4`, {
       method: "GET",
       headers: {
@@ -62,6 +65,9 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   }
 
   async function Fetch5MostPopularTracks() {
+    if (!Token) {
+      await GetToken();
+    }
     const response = await fetch(`https://api.spotify.com/v1/artists/${artist}/top-tracks`, {
       method: "GET",
       headers: {
@@ -139,8 +145,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams({
-      }),
+      body: new URLSearchParams({}),
     });
     if (response.ok) {
       const data = await response.json();
@@ -150,7 +155,9 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
-  
+
+  useEffect(() => {}, [Token]);
+
   const Values: IContext = {
     GetToken,
     FetchArtist,
@@ -169,7 +176,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     SearchedArtist,
     setSearchedArtist,
     Token,
-    setToken
+    setToken,
   };
   return (
     <>
