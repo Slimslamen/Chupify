@@ -17,7 +17,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
 
 
   async function GetToken() {
-    const response = await fetch("/api/auth/callback", {
+    const response = await fetch("/middleware", {
       method: "GET",
       credentials: "include",
       headers: {
@@ -25,7 +25,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       },
     });
     const data = await response.json();
-    console.log("data",data);
+    setToken(data.Token);
+    console.log(data.Token);
   }
 
   async function FetchArtist() {

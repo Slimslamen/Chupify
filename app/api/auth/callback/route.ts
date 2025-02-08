@@ -4,21 +4,18 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     console.log("🔍 Redirected URL:", url.href); // Debugging
 
-    const error = url.searchParams.get("error");
-    console.log("🔍 error URL:", error); // Debugging
-
     const code = url.searchParams.get("code");
     console.log("🔑 Received code:", code); // Should print the Spotify code
 
+
+    // If no code is provided, it will run a loop 1 sec at a time until a code is provided
     if (!code) {
+        while (!code) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
         return NextResponse.json({ error: "No code provided" }, { status: 400 });
     }
-
-    if (error) {
-        console.error("Spotify OAuth Error:", error);
-        return NextResponse.json({ error: "User denied access" }, { status: 403 });
-    }
-
+    
     // Creating the parameters for the request, then encoding every key and its' value in URI format and concatenating it, to then send it in the request body
     const data: { [key: string]: string } = {
         grant_type: "authorization_code",
@@ -26,6 +23,7 @@ export async function GET(req: NextRequest) {
         redirect_uri: process.env.REDIRECT_URI as string,
     };
     const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+    
 
     const response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
@@ -37,6 +35,7 @@ export async function GET(req: NextRequest) {
         },
         body: formBody,
     });
+    
 
     if (response.ok) {
         const TokenRes = await response.json();

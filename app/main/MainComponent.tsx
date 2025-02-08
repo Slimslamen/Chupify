@@ -9,10 +9,11 @@ import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
+  const { FetchArtist, setArtist, Artist, GetToken, Token } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
     GetToken();
+    console.log("Token: ", Token);
   }, []);
 
   useEffect(() => {
