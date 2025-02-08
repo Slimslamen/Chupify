@@ -1,13 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 export default function LoginComponent() {
-  const router = useRouter();
 
-  const SpotifyAuth = (e : any) => {
+  const SpotifyAuth = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    router.push("/api/auth/login"); // Use router.push to navigate to the login URL
+    window.location.href = "/api/auth/login";
   };
 
   return (

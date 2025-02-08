@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, ReactNode, useState } from "react";
-import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, IRefreshToken, ITrack } from "../Interfaces/types";
+import { IAlbumDataResponse, IArtist, IContext, IExternalUrls, ITrack } from "../Interfaces/types";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -12,8 +12,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
   const [Token, setToken] = useState<string | undefined>();
 
-
-  const clientId: string | undefined = process.env.NEXT_PUBLIC_CLIENT_ID;
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
   const Artista: string = "7HO5fOXE4gh3lzZn64tX2E";
 

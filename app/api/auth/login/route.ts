@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 const Scopes = [
@@ -16,13 +15,14 @@ const Scopes = [
   "user-library-read",
 ].join(",");
 
-const Login_URL = `https://accounts.spotify.com/authorize?${new URLSearchParams({
+const LOGIN_URL = `https://accounts.spotify.com/authorize?${new URLSearchParams({
   response_type: "code",
-  client_id: process.env.NEXT_PUBLIC_CLIENT_ID as string,
+  client_id: process.env.CLIENT_ID as string,
   scope: Scopes,
   redirect_uri: "http://localhost:3000/api/auth/callback",
 }).toString()}`;
 
 export async function GET() {
-    return redirect(Login_URL);
+    console.log("url for login" + LOGIN_URL)
+    return NextResponse.redirect(LOGIN_URL);
   }
