@@ -30,8 +30,8 @@ export default function ArtistTracks() {
   useEffect(() => {
     if (Tracks) {
       setTrackLoad(true);
+      console.log(Tracks);    
     }
-    console.log(Tracks)
   }, [Tracks]);
 
   return (
@@ -56,7 +56,7 @@ export default function ArtistTracks() {
                   </div>
                 </div>
                 <h3>
-                  {Math.floor(track.duration_ms / 60000)}:{Math.floor((track.duration_ms % 60000) / 1000).toFixed(0)}
+                    {Math.floor(track.duration_ms / 60000)}:{(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}
                 </h3>
               </div>
             ))}

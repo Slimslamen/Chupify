@@ -12,7 +12,7 @@ export default function SearchBar() {
   async function handleSubmit(e : React.FormEvent){
     e.preventDefault();
     const res = await SearchForArtist(Search)
-    console.log(res)
+    console.log("Searched ",res)
   }
   return (
     <div>

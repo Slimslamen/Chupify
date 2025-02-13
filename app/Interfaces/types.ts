@@ -18,7 +18,12 @@ export interface IContext {
   Token: string | undefined;
   setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
-
+export interface FollowedArtist {
+  created_at: string; // Timestamp when the artist was followed
+  artist_name: string;
+  artist_Id: string;
+  artist_Uri: string;
+}
 export interface IRefreshToken {
   access_token: string;
   token_type: string;

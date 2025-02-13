@@ -23,9 +23,6 @@ export default function MainComponent() {
   }, []);
   
   useEffect(() => {
-    if (Artist) {
-      console.log("Updated Artist state: ", Artist);
-    }
   }, [Artist]);
 
   return (

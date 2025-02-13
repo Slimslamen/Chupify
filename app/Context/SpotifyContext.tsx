@@ -104,9 +104,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   }
 
   async function PlayTrack(contextUri: string) {
-
-    console.log("SHIIIIT",contextUri)
-    
     const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
       method: "PUT",
       headers: {
@@ -119,7 +116,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       }),
     });
     if (response.ok) {
-      console.log("Ok");
+      return;
     } else {
       throw new Error(`Error playing track: ${response.status}`);
     }
