@@ -13,9 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model FollowArtist {
   id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  created String 
+  artist_name  String
+  artist_id  String
+  artist_uri  String
 }

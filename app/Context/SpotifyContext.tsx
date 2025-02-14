@@ -2,6 +2,8 @@
 
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { IAlbumDataResponse, IArtist, IContext, ITrack } from "../Interfaces/types";
+import { AddArtistToDb } from "../lib/prismaTools";
+
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -11,6 +13,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
   const [Token, setToken] = useState<string | undefined>();
+  const [addToList, setAddToList] = useState(false)
 
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
 
@@ -23,12 +26,17 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       return data.access_token;
     } 
   }
-
+  
+  useEffect(() => {
+    AddArtistToDb(Artist, Albums?.items[0])
+  }, [addToList])
+  
   useEffect(() => {
     if (SearchedArtist) {
       FetchArtist();
       FetchArtistAlbums();
       Fetch5MostPopularTracks();
+      AddArtistToDb(Artist, Albums?.items[0])
     }
   }, [SearchedArtist]);
 
@@ -49,7 +57,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error fetching artist: ${response.status}`);
     }
   }
-
+  
   async function FetchArtistAlbums() {
     const token = Token || (await GetToken());
     const response = await fetch(`https://api.spotify.com/v1/artists/${SearchedArtist ? SearchedArtist : artist}/albums?limit=4`, {
@@ -133,16 +141,28 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       }),
     });
     if (response.ok) {
-        return;
+      return;
     } else {
       throw new Error(`Error playing track: ${response.status}`);
     }
   }
-
-
-
-  useEffect(() => {}, [Token]);
-
+  async function GetLatestAlbumOrTracks(){
+    const response = await fetch(`https://api.spotify.com/v1/artists/${SearchedArtist}/albums?include_groups=single%2Cablum&limit=50&offset=0`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${Token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        
+      }),
+    });
+    if (response.ok) {
+      return;
+    } else {
+      throw new Error(`Error playing track: ${response.status}`);
+    }
+  }
   const Values: IContext = {
     GetToken,
     FetchArtist,
@@ -161,6 +181,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     setSearchedArtist,
     Token,
     setToken,
+    addToList, 
+    setAddToList
   };
   return (
     <>

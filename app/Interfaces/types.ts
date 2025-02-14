@@ -17,9 +17,11 @@ export interface IContext {
   setSearchedArtist: React.Dispatch<React.SetStateAction<string | undefined>>;
   Token: string | undefined;
   setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
+  addToList: boolean;
+  setAddToList: React.Dispatch<React.SetStateAction<boolean>>
 }
 export interface FollowedArtist {
-  created_at: string; // Timestamp when the artist was followed
+  created: string; // Timestamp when the artist was followed
   artist_name: string;
   artist_Id: string;
   artist_Uri: string;

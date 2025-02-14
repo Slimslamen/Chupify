@@ -5,7 +5,7 @@ export async function GET(req: Request) {
     const accessToken = cookieHeader?.split("; ").find(row => row.startsWith("access_token="))?.split("=")[1];
 
     const data = { access_token: accessToken }
-    //console.log("!!!!!!!FETCHED TOKEN!!!!!!!", refreshToken)
+    console.log("!!!!!!!FETCHED TOKEN!!!!!!!", accessToken)
     if (!accessToken) {
         return NextResponse.json({ error: "No token found" }, { status: 401 });
     }

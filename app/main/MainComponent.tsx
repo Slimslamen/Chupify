@@ -23,6 +23,7 @@ export default function MainComponent() {
   }, []);
   
   useEffect(() => {
+    console.log("Artist ",Artist)
   }, [Artist]);
 
   return (
