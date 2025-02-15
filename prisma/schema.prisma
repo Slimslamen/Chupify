@@ -14,9 +14,7 @@ datasource db {
 }
 
 model FollowArtist {
-  id    Int     @id @default(autoincrement())
-  created String 
+  id    String     @id
   artist_name  String
-  artist_id  String
-  artist_uri  String
+  image String
 }

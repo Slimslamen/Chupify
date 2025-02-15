@@ -2,8 +2,7 @@
 
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { IAlbumDataResponse, IArtist, IContext, ITrack } from "../Interfaces/types";
-import { AddArtistToDb } from "../lib/prismaTools";
-
+import { AddArtistToDb, GetArtistFromDb } from "../lib/prismaTools";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -13,30 +12,42 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
   const [Token, setToken] = useState<string | undefined>();
-  const [addToList, setAddToList] = useState(false)
+  const [addToList, setAddToList] = useState(false);
 
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
-
 
   async function GetToken() {
     const res = await fetch("/api/auth/token", { credentials: "include" });
     if (res.ok) {
-        const data = await res.json();
-        setToken(data.access_token);
+      const data = await res.json();
+      setToken(data.access_token);
       return data.access_token;
-    } 
+    }
   }
-  
+
   useEffect(() => {
-    AddArtistToDb(Artist, Albums?.items[0])
-  }, [addToList])
-  
+    const Func = async () => {
+      if (Artist) {
+        if (Artist.saved == true) {
+          const artistsInDb = GetArtistFromDb();
+          const transformedResponse = (await artistsInDb).map((a) => a.artist_name).includes(Artist.name);
+          if (transformedResponse) {
+            console.log("Aldready there");
+          } else {
+            console.log("Good to go");
+            AddArtistToDb(Artist)
+          }
+        }
+      }
+    };
+    Func();
+  }, [addToList]);
+
   useEffect(() => {
     if (SearchedArtist) {
       FetchArtist();
       FetchArtistAlbums();
       Fetch5MostPopularTracks();
-      AddArtistToDb(Artist, Albums?.items[0])
     }
   }, [SearchedArtist]);
 
@@ -51,22 +62,26 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     });
     if (response.ok) {
       const data = await response.json();
+      Object.assign(data, { saved: false });
       setArtist(data);
       return data;
     } else {
       throw new Error(`Error fetching artist: ${response.status}`);
     }
   }
-  
+
   async function FetchArtistAlbums() {
     const token = Token || (await GetToken());
-    const response = await fetch(`https://api.spotify.com/v1/artists/${SearchedArtist ? SearchedArtist : artist}/albums?limit=4`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists/${SearchedArtist ? SearchedArtist : artist}/albums?limit=4`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       setAlbums(data);
@@ -78,16 +93,19 @@ function SpotifyContext({ children }: { children: ReactNode }) {
 
   async function Fetch5MostPopularTracks() {
     const token = Token || (await GetToken());
-    const response = await fetch(`https://api.spotify.com/v1/artists/${SearchedArtist ? SearchedArtist : artist}/top-tracks`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists/${SearchedArtist ? SearchedArtist : artist}/top-tracks`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
     if (response.ok) {
       const data = await response.json();
-      setTracks(data.tracks.slice(0, 5).map((track : ITrack) => ({...track, IsHovered:false})));
+      setTracks(data.tracks.slice(0, 5).map((track: ITrack) => ({ ...track, IsHovered: false })));
       return data;
     } else {
       throw new Error(`Error fetching top tracks: ${response.status}`);
@@ -146,18 +164,19 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error playing track: ${response.status}`);
     }
   }
-  async function GetLatestAlbumOrTracks(){
-    const response = await fetch(`https://api.spotify.com/v1/artists/${SearchedArtist}/albums?include_groups=single%2Cablum&limit=50&offset=0`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${Token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        
-      }),
-    });
+  async function GetLatestAlbumOrTracks() {
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists/${SearchedArtist}/albums?include_groups=single%2Calbum`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${Token}`,
+        },
+      }
+    );
     if (response.ok) {
+      const data = await response.json();
+      console.log("Data ", data);
       return;
     } else {
       throw new Error(`Error playing track: ${response.status}`);
@@ -171,6 +190,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     SearchForArtist,
     PlayTrack,
     SaveAlbumToLibrary,
+    GetLatestAlbumOrTracks,
     Artist,
     setArtist,
     setAlbums,
@@ -181,8 +201,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     setSearchedArtist,
     Token,
     setToken,
-    addToList, 
-    setAddToList
+    addToList,
+    setAddToList,
   };
   return (
     <>

@@ -7,7 +7,7 @@ import ArtistImage from "../(Components)/ArtistImage";
 import TrackSkeleton from "../(Components)/Skeletons/TrackSkeleton";
 
 export default function ArtistTracks() {
-  const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack } = useContext(AppContext)! as IContext;
+  const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack, Artist } = useContext(AppContext)! as IContext;
   const [TrackLoad, setTrackLoad] = useState<boolean>(false);
 
 
@@ -30,7 +30,8 @@ export default function ArtistTracks() {
   useEffect(() => {
     if (Tracks) {
       setTrackLoad(true);
-      console.log(Tracks);    
+      console.log("Tracks",Tracks);    
+      console.log("Artist",Artist)
     }
   }, [Tracks]);
 

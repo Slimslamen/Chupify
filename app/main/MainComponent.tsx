@@ -7,6 +7,7 @@ import NavbarComponent from "../(Components)/NavbarComponent";
 import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
+import { GetArtistFromDb } from "../lib/prismaTools";
 
 export default function MainComponent() {
   const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
@@ -23,7 +24,7 @@ export default function MainComponent() {
   }, []);
   
   useEffect(() => {
-    console.log("Artist ",Artist)
+    GetArtistFromDb()
   }, [Artist]);
 
   return (

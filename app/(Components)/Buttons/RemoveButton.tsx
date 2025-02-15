@@ -1,8 +1,13 @@
 import React from "react";
 
-export default function RemoveButton() {
+interface RemoveButtonProps {
+  onDelete: () => void;
+}
+
+export default function RemoveButton({ onDelete }: RemoveButtonProps) {
   return (
     <svg
+    onClick={() => onDelete()}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

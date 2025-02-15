@@ -1,4 +1,3 @@
-
 export interface IContext {
   GetToken: () => Promise<void>;
   SearchForArtist:(name:string) => Promise<string>
@@ -7,6 +6,7 @@ export interface IContext {
   Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
   PlayTrack: (contextUri:string) => Promise<void>;
   SaveAlbumToLibrary:(AlbumId:string) => Promise<void>;
+  GetLatestAlbumOrTracks:() => Promise<void>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
   setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
@@ -20,11 +20,10 @@ export interface IContext {
   addToList: boolean;
   setAddToList: React.Dispatch<React.SetStateAction<boolean>>
 }
-export interface FollowedArtist {
-  created: string; // Timestamp when the artist was followed
+export interface IFollowedArtist {
+  id: string;
   artist_name: string;
-  artist_Id: string;
-  artist_Uri: string;
+  image: string;
 }
 export interface IRefreshToken {
   access_token: string;
@@ -44,6 +43,7 @@ export interface IArtist {
   popularity: number;
   type: string;
   uri: string;
+  saved: boolean;
 }
 export interface IAlbumData {
   album_type: string;
@@ -90,7 +90,7 @@ export interface ITrack {
   track_number: number;
   type: string;
   uri: string;
-  IsHovered: boolean
+  IsHovered: boolean;
 }
 export interface ISearchResponse {
   artists: {
@@ -121,5 +121,14 @@ export interface IPic {
 }
 export interface ITopTracksResponse {
   tracks: ITrack[];
+}
+export interface ILatestRelease {
+  href: string;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  items: IAlbumData[];
 }
 
