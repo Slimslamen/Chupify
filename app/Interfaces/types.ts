@@ -7,6 +7,8 @@ export interface IContext {
   PlayTrack: (contextUri:string) => Promise<void>;
   SaveAlbumToLibrary:(AlbumId:string) => Promise<void>;
   GetLatestAlbumOrTracks:() => Promise<void>;
+  SaveTrackToList:(uri:string) => Promise<void>;
+  GetTotalTracksInList: () => Promise<IPlaylistTracksResponse>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
   setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
@@ -71,7 +73,6 @@ export interface IAlbumDataResponse {
   total: number;
 }
 
-
 export interface ITrack {
   album: IAlbumData;
   artists: IArtist[];
@@ -130,5 +131,30 @@ export interface ILatestRelease {
   previous: string | null;
   total: number;
   items: IAlbumData[];
+}
+
+export interface IPlaylistTracksResponse {
+  href: string;
+  items: Array<{
+    added_at: string;
+    added_by: {
+      external_urls: IExternalUrls;
+      href: string;
+      id: string;
+      type: string;
+      uri: string;
+    };
+    is_local: boolean;
+    primary_color: string | null;
+    track: ITrack;
+    video_thumbnail: {
+      url: string | null;
+    };
+  }>;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
 }
 

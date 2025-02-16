@@ -7,7 +7,7 @@ import ArtistImage from "../(Components)/ArtistImage";
 import TrackSkeleton from "../(Components)/Skeletons/TrackSkeleton";
 
 export default function ArtistTracks() {
-  const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack, Artist } = useContext(AppContext)! as IContext;
+  const { Fetch5MostPopularTracks, setTracks, Tracks, PlayTrack, Artist, SaveTrackToList } = useContext(AppContext)! as IContext;
   const [TrackLoad, setTrackLoad] = useState<boolean>(false);
 
 
@@ -57,7 +57,8 @@ export default function ArtistTracks() {
                   </div>
                 </div>
                 <h3>
-                    {Math.floor(track.duration_ms / 60000)}:{(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}
+                {track.IsHovered == false ?  `${Math.floor(track.duration_ms / 60000)}:${(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}`: <button onClick={() => SaveTrackToList(track.uri)}>+</button>}
+                  
                 </h3>
               </div>
             ))}

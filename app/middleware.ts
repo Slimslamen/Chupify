@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const refreshToken = req.cookies.get("refresh_token");
   const accessToken = req.cookies.get("accessToken_token");
 
-  console.log("!!!!!!!COOKIE!!!!!!!",refreshToken)
-
-  if (!refreshToken) {
+  if (!accessToken) {
     // Redirect to login page if no token is present
     return NextResponse.redirect(new URL("/login", req.url));
-  } else if (refreshToken) {
+  } else if (accessToken) {
     // Attach token to request headers
     const requestHeaders = new Headers(req.headers);
 
     console.log("!!!!!!HEADER!!!!!!!!!", requestHeaders);
 
-    requestHeaders.set("Authorization", `Bearer ${refreshToken}`);
+    requestHeaders.set("Authorization", `Bearer ${accessToken}`);
 
     console.log("!!!!!!NEW HEADER!!!!!!!!!", requestHeaders);
 

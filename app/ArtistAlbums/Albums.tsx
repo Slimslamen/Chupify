@@ -47,7 +47,7 @@ useEffect(() => {
                   <div className="space-y-1">
                     <h4 className="font-extrabold w-full h-11 mb-2 overflow-hidden">{album.name}</h4>
                     <div className="flex flex-row justify-between w-full items-center">
-                      <p className="text-xs">{album.artists[0].name}</p>
+                      <p className="text-xs text-zinc-400">{album.artists[0].name}</p>
                       <button onClick={() => SaveAlbumToLibrary(album.id)}><FollowButton /></button>
                     </div>
                   </div>

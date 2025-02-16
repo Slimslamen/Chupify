@@ -17,7 +17,7 @@ export default function ListSwitch() {
   };
 
   useEffect(() => {
-    // Any additional logic that depends on Artist or Tracks
+    
   }, [Artist]);
 
   return (

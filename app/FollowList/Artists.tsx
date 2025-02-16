@@ -18,7 +18,6 @@ export default function Artists() {
   const deleteDb = (artistId: string) => {
     setDeleted(true);
     DeleteArtistFromDb(artistId);
-    console.log("Id " + artistId);
   };
 
   useEffect(() => {
@@ -26,8 +25,6 @@ export default function Artists() {
       const artistsInList = await GetArtistFromDb();
       if (artistsInList) setList(artistsInList);
       setDeleted(false);
-
-      console.log("!!!List!!!", List);
     };
     func();
   }, [deleted, addToList]);
