@@ -22,7 +22,7 @@ export async function GetArtistFromDb(){
     return allArtists;
 }
 
-export async function DeleteArtistFromDb(artistId:string){
+export async function DeleteArtistFromDb(artistId:string ){
   const deleteUser = await prisma.followArtist.delete({
     where: {
         id: artistId

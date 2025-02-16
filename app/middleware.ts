@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const refreshToken = req.cookies.get("refresh_token");
+  const accessToken = req.cookies.get("accessToken_token");
 
   console.log("!!!!!!!COOKIE!!!!!!!",refreshToken)
 
@@ -24,8 +25,8 @@ export function middleware(req: NextRequest) {
       },
     });
   }
-  if (!req.nextUrl.pathname.startsWith("/api/auth") && !refreshToken) {
-    return NextResponse.redirect("http://localhost:3000/login");
+  if (!req.nextUrl.pathname.startsWith("/api/chupify") && !accessToken) {
+    return NextResponse.redirect("http://localhost:3000");
   }
   return NextResponse.next();
 }

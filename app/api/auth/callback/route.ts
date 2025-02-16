@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
         const TokenResponse = NextResponse.redirect("http://localhost:3000/api/chupify");
 
-        TokenResponse.cookies.set("access_token", TokenRes.access_token, { httpOnly: true, maxAge: TokenRes.expires_in, path: "/" });
+        TokenResponse.cookies.set("access_token", TokenRes.access_token, { httpOnly: true, maxAge: TokenRes.expires_in, path: "/", secure: true });
         TokenResponse.cookies.set("refresh_token", TokenRes.refresh_token, { httpOnly: true, secure: true, path:"/" });
 
         return TokenResponse;

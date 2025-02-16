@@ -7,7 +7,7 @@ interface RemoveButtonProps {
 export default function RemoveButton({ onDelete }: RemoveButtonProps) {
   return (
     <svg
-    onClick={() => onDelete()}
+      onClick={onDelete}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

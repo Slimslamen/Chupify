@@ -1,25 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "../Interfaces/types";
 
 export default function ListSwitch() {
-  const { setAddToList, Artist } = useContext(AppContext)! as IContext;
-  const [isChecked, setIsChecked] = useState(false);
-
-  // useEffect(() => {
-  //   if (Artist) {
-  //     setIsChecked(Artist.saved);
-  //   }
-  // }, [Artist]);
+  const { setAddToList, Artist, addToList } = useContext(AppContext)! as IContext;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
-    setIsChecked(checked);
     setAddToList(checked);
     if (Artist) {
       Artist.saved = checked;
     }
+    setTimeout(() => {
+      setAddToList(prev => !prev)
+    }, 400);
   };
+
+  useEffect(() => {
+    // Any additional logic that depends on Artist or Tracks
+  }, [Artist]);
 
   return (
     <div className="flex flex-row space-x-5 items-center">
@@ -28,7 +27,7 @@ export default function ListSwitch() {
         <input
           name="AddToList"
           onChange={handleChange}
-          checked={isChecked}
+          checked={addToList}
           className="sr-only peer"
           type="checkbox"
         />
