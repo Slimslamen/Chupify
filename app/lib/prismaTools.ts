@@ -12,7 +12,7 @@ export async function AddArtistToDb(Artist : IArtist | undefined){
     });
 
     if (existingArtist) {
-      return;
+      return false;
     }
     
     await prisma.followArtist.create({
@@ -22,6 +22,7 @@ export async function AddArtistToDb(Artist : IArtist | undefined){
         image: Artist.images[0].url
       }
     });
+    return true;
 }
 
 export async function GetArtistFromDb(){

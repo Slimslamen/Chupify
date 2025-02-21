@@ -21,6 +21,8 @@ export interface IContext {
   setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
   addToList: boolean;
   setAddToList: React.Dispatch<React.SetStateAction<boolean>>
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 export interface IFollowedArtist {
   id: string;

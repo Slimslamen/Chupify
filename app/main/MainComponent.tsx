@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useContext, useEffect } from "react";
 import { AppContext } from "../Context/SpotifyContext";
@@ -8,10 +8,11 @@ import ArtistComponent from "../Artist/ArtistComponent";
 import Albums from "../ArtistAlbums/Albums";
 import Artists from "../FollowList/Artists";
 import { GetArtistFromDb } from "../lib/prismaTools";
+import ListModal from "../(Components)/ListModal";
 
 export default function MainComponent() {
   const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
-  
+
   useEffect(() => {
     const GetSearchQuery = async () => {
       const res = await FetchArtist();
@@ -19,23 +20,28 @@ export default function MainComponent() {
         setArtist(res);
       }
     };
-    GetToken()
+    GetToken();
     GetSearchQuery();
   }, []);
-  
+
   useEffect(() => {
-    GetArtistFromDb()
+    GetArtistFromDb();
   }, [Artist]);
 
   return (
     <div>
-      <div className="space-y-12 ml-12 z-0">
-        <NavbarComponent />
-        <ArtistComponent />
-        <Albums />
+      <div>
+        <div className="space-y-12 ml-12">
+          <NavbarComponent />
+          <ArtistComponent />
+          <Albums />
+        </div>
+        <div className="fixed h-[50em] top-0 right-0">
+          <Artists />
+        </div>
       </div>
-      <div className="fixed h-[36em] top-0 right-0 z-10">
-        <Artists />
+      <div className="z-50">
+        <ListModal />
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "../Interfaces/types";
+import { AddArtistToDb } from "../lib/prismaTools";
 
 export default function ListSwitch() {
-  const { setAddToList, Artist, addToList } = useContext(AppContext)! as IContext;
+  const { setAddToList, Artist, addToList, setOpenModal } = useContext(AppContext)! as IContext;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setAddToList(checked);
     if (Artist) {
@@ -14,6 +15,11 @@ export default function ListSwitch() {
     setTimeout(() => {
       setAddToList(prev => !prev)
     }, 400);
+    const ModalResponse = await AddArtistToDb(Artist);
+    if(!ModalResponse){
+      document.body.style.overflow = "hidden"
+      setOpenModal(ModalResponse)
+    }
   };
 
   useEffect(() => {
@@ -21,7 +27,7 @@ export default function ListSwitch() {
   }, [Artist]);
 
   return (
-    <div className="flex flex-row space-x-5 items-center">
+    <div className="flex flex-row space-x-5 items-center z-10">
       <h4 className="text-sm mb-2 text-TextColor">Add To List</h4>
       <label className="switch relative cursor-pointer">
         <input

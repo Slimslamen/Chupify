@@ -12,7 +12,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Tracks, setTracks] = useState<ITrack[] | undefined>();
   const [SearchedArtist, setSearchedArtist] = useState<string | undefined>("");
   const [Token, setToken] = useState<string | undefined>();
-  const [addToList, setAddToList] = useState(false);
+  const [addToList, setAddToList] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(true)
 
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
 
@@ -247,6 +248,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     setToken,
     addToList,
     setAddToList,
+    openModal, 
+    setOpenModal
   };
   return (
     <>
