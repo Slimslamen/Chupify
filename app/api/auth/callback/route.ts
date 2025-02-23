@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "No code provided" }, { status: 400 });
     }
     
+    console.log("!!!!!!CODE!!!!!!!" + code)
+
     // Creating the parameters for the request, then encoding every key and its' value in URI format and concatenating it, to then send it in the request body
     const data: { [key: string]: string } = {
         grant_type: "authorization_code",

@@ -18,7 +18,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
 
   async function GetToken() {
-    const res = await fetch("/api/auth/token", { credentials: "include" });
+    const res = await fetch("/api/auth/refresh", { credentials: "include" });
     if (res.ok) {
       const data = await res.json();
       setToken(data.access_token);

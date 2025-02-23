@@ -36,7 +36,7 @@ export default function MainComponent() {
           <ArtistComponent />
           <Albums />
         </div>
-        <div className="fixed h-[50em] top-0 right-0">
+        <div className="fixed h-[62em] top-0 right-0">
           <Artists />
         </div>
       </div>
