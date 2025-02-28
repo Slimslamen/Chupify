@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -24,19 +23,21 @@ export async function GET(req: Request) {
     },
     body: formBody,
   });
+  
+  console.log("!!!!!!!!DATA!!!!!!!!!!!", refreshResponse);
 
   if (refreshResponse.ok) {
     const refreshRes = await refreshResponse.json();
 
-    console.log("!!!!!!!!DATA!!!!!!!!!!!", refreshRes);
-    (await cookies()).delete("refresh_token");
+    console.log("REPONSE IS OK");    
 
     const response = NextResponse.json({ access_token: refreshRes.access_token });
     response.cookies.set("access_token", refreshRes.access_token, { httpOnly: true, maxAge: refreshRes.expires_in, path: "/", secure: true });
-    response.cookies.set("refresh_token", refreshRes.refresh_token, { httpOnly: true, secure: true, path: "/" });
+    //response.cookies.set("refresh_token", refreshRes.refresh_token, { httpOnly: true, secure: true, path: "/" });
 
     return response;
   } else {
+    console.log("NOT OK")
     return NextResponse.json({ error: "Response failed" }, { status: 401 });
   }
 }

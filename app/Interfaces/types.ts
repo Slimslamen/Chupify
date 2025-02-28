@@ -8,7 +8,6 @@ export interface IContext {
   SaveAlbumToLibrary:(AlbumId:string) => Promise<void>;
   GetLatestAlbumOrTracks:() => Promise<void>;
   SaveTrackToList:(uri:string) => Promise<void>;
-  GetTotalTracksInList: () => Promise<IPlaylistTracksResponse>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
   Artist: IArtist | undefined;
   setAlbums: React.Dispatch<React.SetStateAction<IAlbumDataResponse | undefined>>;
@@ -23,6 +22,8 @@ export interface IContext {
   setAddToList: React.Dispatch<React.SetStateAction<boolean>>
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+  DbToSpotify: IArtistAlbumsResponse | undefined;
+  setDbToSpotify: React.Dispatch<React.SetStateAction<IArtistAlbumsResponse | undefined>>
 }
 export interface IFollowedArtist {
   id: string;
@@ -158,5 +159,15 @@ export interface IPlaylistTracksResponse {
   offset: number;
   previous: string | null;
   total: number;
+}
+
+export interface IArtistAlbumsResponse {
+  href: string;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  items: IAlbumData[];
 }
 

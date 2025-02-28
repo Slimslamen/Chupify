@@ -11,7 +11,7 @@ import { GetArtistFromDb } from "../lib/prismaTools";
 import ListModal from "../(Components)/ListModal";
 
 export default function MainComponent() {
-  const { FetchArtist, setArtist, Artist, GetToken } = useContext(AppContext)! as IContext;
+  const { FetchArtist, setArtist, Artist, GetToken, Token } = useContext(AppContext)! as IContext;
 
   useEffect(() => {
     const GetSearchQuery = async () => {
@@ -26,6 +26,7 @@ export default function MainComponent() {
 
   useEffect(() => {
     GetArtistFromDb();
+    console.log("TOKEN " + Token)
   }, [Artist]);
 
   return (
@@ -36,8 +37,9 @@ export default function MainComponent() {
           <ArtistComponent />
           <Albums />
         </div>
-        <div className="fixed h-[62em] top-0 right-0">
-          <Artists />
+        <div className="fixed h-[50em] top-0 right-0">
+            <Artists />
+            <button className="ml-20">Add Latest release</button>
         </div>
       </div>
       <div className="z-50">
