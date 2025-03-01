@@ -57,7 +57,7 @@ export default function ArtistTracks() {
                   </div>
                 </div>
                 <h3>
-                {track.IsHovered == false ?  `${Math.floor(track.duration_ms / 60000)}:${(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}`: <button onClick={() => SaveTrackToList(track.uri)}>+</button>}
+                {track.IsHovered == false ?  `${Math.floor(track.duration_ms / 60000)}:${(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}`: <button onClick={() => console.log(track.uri)}>+</button>}
                   
                 </h3>
               </div>

@@ -111,7 +111,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     }
   }
 
-  
   async function PlayTrack(contextUri: string) {
     console.log("!!!!!!!TRACK!!!!!!!!" + contextUri)
     const token = Token || (await GetToken());
@@ -174,7 +173,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
 
     await Promise.map(AllArtists, async (artist) => {
       const response = await fetch(
-          `https://api.spotify.com/v1/artists/${artist.artist_name}/albums?include_groups=single%2Calbum`,
+          `https://api.spotify.com/v1/artists/${artist.id}/albums?include_groups=single%2Calbum`,
           {
             method: "GET",
             headers: {
@@ -182,38 +181,50 @@ function SpotifyContext({ children }: { children: ReactNode }) {
             },
           }
         );
-        if(!response){
+        if(!response.ok){
           console.log("!!!!!!!!!!!UPS!!!!!!!!!!")
+          return;
         } else {
           const data = await response.json();
             setDbToSpotify(data);
-        }
-        
-        
+          }
+            const date = new Date();
+            date.setDate(date.getDate() - 3);
+            const formattedDate = date.toLocaleDateString();
+          console.log("TEST",DbToSpotify)
+
+          DbToSpotify?.items.map((item) => {
+            if(item.album_type == "album" && formattedDate < item.release_date){
+              SaveAlbumToLibrary(item.id);
+            } else if(item.album_type == "single" && formattedDate < item.release_date){
+              const formattedString = item.uri.slice(0,8) + "track" + item.uri.slice(13,item.uri.length);              
+              console.log("WORKING", item.uri);
+              SaveTrackToList(item.uri);
+            }
+          })
       })
     }
     async function SaveTrackToList(uri:string) {
       const token = Token || (await GetToken());
-    
-    const response = await fetch(
-      `https://api.spotify.com/v1/playlists/1rpJgvmkDkzxiChjPXgRSP/tracks`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uris: [uri],
-        }),
+      const response = await fetch(
+        `https://api.spotify.com/v1/playlists/1rpJgvmkDkzxiChjPXgRSP/tracks`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uris: [uri],
+          }),
+        }
+      );
+      if (response.ok) {
+        await response.json();    
+        return;
+      } else {
+        throw new Error(`Error playing track: ${response.status}`);
       }
-    );
-    if (response.ok) {
-      await response.json();    
-      return;
-    } else {
-      throw new Error(`Error playing track: ${response.status}`);
-    }
   }
   
   const Values: IContext = {
