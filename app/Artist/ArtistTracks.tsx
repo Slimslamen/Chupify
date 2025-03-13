@@ -45,7 +45,7 @@ export default function ArtistTracks() {
                 key={index}
                 onMouseEnter={() => handleHover(track.name)}
                 onMouseLeave={() => handleHover(track.name)}
-                className={` text-TextColor flex flex-row justify-between items-center bg-componentLightGrey hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
+                className={` text-TextColor flex flex-row justify-between items-center hover:bg-componentGreyHover py-2 px-3 rounded-lg transition ease-in-out delay-50`}
               >
                 <div className="flex flex-row items-center space-x-5">
                   {track.IsHovered == false ? <p>{index + 1}</p> : <button onClick={() => PlayTrack(track.uri)}><PlayButton /></button>}
@@ -57,7 +57,7 @@ export default function ArtistTracks() {
                   </div>
                 </div>
                 <h3>
-                {track.IsHovered == false ?  `${Math.floor(track.duration_ms / 60000)}:${(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}`: <button onClick={() => console.log(track.uri)}>+</button>}
+                {track.IsHovered == false ?  `${Math.floor(track.duration_ms / 60000)}:${(Math.floor((track.duration_ms % 60000) / 1000) < 10 ? '0' : '') + Math.floor((track.duration_ms % 60000) / 1000)}`: <button onClick={() => SaveTrackToList(track.uri)} className="text-2xl mr-2 hover:text-white active:text-componentGreyHover">+</button>}
                   
                 </h3>
               </div>

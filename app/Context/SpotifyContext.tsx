@@ -168,8 +168,8 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     }
   }
   async function GetLatestAlbumOrTracks() {
-    const token = Token || (await GetToken());
     const AllArtists = await GetArtistFromDb();
+    const token = Token || (await GetToken());
 
     await Promise.map(AllArtists, async (artist) => {
       const response = await fetch(
@@ -189,19 +189,22 @@ function SpotifyContext({ children }: { children: ReactNode }) {
             setDbToSpotify(data);
           }
             const date = new Date();
-            date.setDate(date.getDate() - 3);
+            date.setDate(date.getDate() - 10);
             const formattedDate = date.toLocaleDateString();
-          console.log("TEST",DbToSpotify)
-
-          DbToSpotify?.items.map((item) => {
-            if(item.album_type == "album" && formattedDate < item.release_date){
-              SaveAlbumToLibrary(item.id);
-            } else if(item.album_type == "single" && formattedDate < item.release_date){
-              const formattedString = item.uri.slice(0,8) + "track" + item.uri.slice(13,item.uri.length);              
-              console.log("WORKING", item.uri);
-              SaveTrackToList(item.uri);
+            if(DbToSpotify != undefined){
+              DbToSpotify?.items.map((item) => {
+                if(item.album_type == "album" && formattedDate < item.release_date){
+                  SaveAlbumToLibrary(item.id);
+                } else if(item.album_type == "single" && formattedDate < item.release_date){
+                  const formattedString = item.uri.slice(0,8) + "track" + item.uri.slice(13,item.uri.length);              
+                  console.log("WORKING", item.uri);
+                  SaveTrackToList(formattedString);
+                }
+              })
+            } else{
+              alert("Ups, please try again");
             }
-          })
+            console.log("TEST",DbToSpotify)
       })
     }
     async function SaveTrackToList(uri:string) {
@@ -221,6 +224,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       );
       if (response.ok) {
         await response.json();    
+        console.log("Sucess")
         return;
       } else {
         throw new Error(`Error playing track: ${response.status}`);
