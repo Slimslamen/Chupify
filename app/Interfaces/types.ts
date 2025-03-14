@@ -6,6 +6,7 @@ export interface IContext {
   Fetch5MostPopularTracks: () => Promise<ITopTracksResponse>;
   PlayTrack: (contextUri:string) => Promise<void>;
   SaveAlbumToLibrary:(AlbumId:string) => Promise<void>;
+  GetAlbumTracks: (id:string) => Promise<void>;
   GetLatestAlbumOrTracks:() => Promise<void>;
   SaveTrackToList:(uri:string) => Promise<void>;
   setArtist: React.Dispatch<React.SetStateAction<IArtist | undefined>>;
@@ -22,8 +23,6 @@ export interface IContext {
   setAddToList: React.Dispatch<React.SetStateAction<boolean>>
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-  DbToSpotify: IArtistAlbumsResponse | undefined;
-  setDbToSpotify: React.Dispatch<React.SetStateAction<IArtistAlbumsResponse | undefined>>
 }
 export interface IFollowedArtist {
   id: string;
@@ -169,5 +168,98 @@ export interface IArtistAlbumsResponse {
   previous: string | null;
   total: number;
   items: IAlbumData[];
+}
+
+export interface IAlbumTracksResponse {
+  href: string;
+  items: Array<{
+    artists: IArtist[];
+    available_markets: string[];
+    disc_number: number;
+    duration_ms: number;
+    explicit: boolean;
+    external_urls: IExternalUrls;
+    href: string;
+    id: string;
+    is_local: boolean;
+    name: string;
+    preview_url: string | null;
+    track_number: number;
+    type: string;
+    uri: string;
+  }>;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+}
+
+export interface IPlaylistResponse {
+  collaborative: boolean;
+  description: string;
+  external_urls: IExternalUrls;
+  followers: {
+    href: string | null;
+    total: number;
+  };
+  href: string;
+  id: string;
+  images: IImage[];
+  name: string;
+  owner: {
+    display_name: string;
+    external_urls: IExternalUrls;
+    href: string;
+    id: string;
+    type: string;
+    uri: string;
+  };
+  public: boolean;
+  snapshot_id: string;
+  tracks: {
+    href: string;
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    total: number;
+    items: {
+      added_at: string;
+      added_by: {
+        external_urls: IExternalUrls;
+        href: string;
+        id: string;
+        type: string;
+        uri: string;
+      };
+      is_local: boolean;
+      track: ITrack;
+      trackObject: {
+        album: IAlbumData;
+        artists: IArtist[];
+        available_markets: string[];
+        disc_number: number;
+        duration_ms: number;
+        explicit: boolean;
+        external_ids: IExternalIds;
+        external_urls: IExternalUrls;
+        href: string;
+        id: string;
+        is_local: boolean;
+        name: string;
+        popularity: number;
+        preview_url: string | null;
+        track_number: number;
+        type: string;
+        uri: string;
+      };
+      video_thumbnail: {
+        url: string | null;
+      };
+    }
+  };
+  type: string;
+  uri: string;
 }
 

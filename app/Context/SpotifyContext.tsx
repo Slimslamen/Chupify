@@ -1,9 +1,9 @@
 "use client";
 
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { IAlbumDataResponse, IArtist, IArtistAlbumsResponse, IContext, ITrack } from "../Interfaces/types";
+import { IAlbumData, IAlbumDataResponse, IAlbumTracksResponse, IArtist, IContext, ITrack } from "../Interfaces/types";
 import { AddArtistToDb, GetArtistFromDb } from "../lib/prismaTools";
-import {Promise} from "bluebird";
+import { Promise} from "bluebird";
 
 const AppContext = createContext<IContext | null>(null);
 
@@ -15,7 +15,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
   const [Token, setToken] = useState<string | undefined>();
   const [addToList, setAddToList] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(true)
-  const [DbToSpotify, setDbToSpotify] = useState<IArtistAlbumsResponse | undefined>()
 
   const artist: string = "6l3HvQ5sa6mXTsMTB19rO5";
 
@@ -167,45 +166,58 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       throw new Error(`Error fetching artist albums: ${response.status}`);
     }
   }
+
+  async function GetAlbumTracks(id:string){
+    const token = Token || (await GetToken());
+
+    const response = await fetch(`https://api.spotify.com/v1/albums/${id}/tracks`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error(`Error fetching artist albums: ${response.status}`);
+    }
+  }
+
   async function GetLatestAlbumOrTracks() {
     const AllArtists = await GetArtistFromDb();
     const token = Token || (await GetToken());
 
     await Promise.map(AllArtists, async (artist) => {
       const response = await fetch(
-          `https://api.spotify.com/v1/artists/${artist.id}/albums?include_groups=single%2Calbum`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        `https://api.spotify.com/v1/artists/${artist.id}/albums?include_groups=single%2Calbum`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        alert("ups...")
+        return;
+      } else {
+        const data = await response.json();
+        const date = new Date();
+        date.setDate(date.getDate() - 3);
+        const formattedDate = date.toLocaleDateString(); // Format date to YYYY-MM-DD
+          
+        data.items.forEach(async (item : IAlbumData) => {
+          if (item.album_type === "album" && formattedDate < item.release_date) {
+            await SaveAlbumToLibrary(item.id);
+          } else if (item.album_type === "single" && formattedDate < item.release_date) {
+            const trackFromAlbum: IAlbumTracksResponse = await GetAlbumTracks(item.id);
+                SaveTrackToList(trackFromAlbum.items[0].uri);
           }
-        );
-        if(!response.ok){
-          console.log("!!!!!!!!!!!UPS!!!!!!!!!!")
-          return;
-        } else {
-          const data = await response.json();
-            setDbToSpotify(data);
-          }
-            const date = new Date();
-            date.setDate(date.getDate() - 10);
-            const formattedDate = date.toLocaleDateString();
-            if(DbToSpotify != undefined){
-              DbToSpotify?.items.map((item) => {
-                if(item.album_type == "album" && formattedDate < item.release_date){
-                  SaveAlbumToLibrary(item.id);
-                } else if(item.album_type == "single" && formattedDate < item.release_date){
-                  const formattedString = item.uri.slice(0,8) + "track" + item.uri.slice(13,item.uri.length);              
-                  console.log("WORKING", item.uri);
-                  SaveTrackToList(formattedString);
-                }
-              })
-            } else{
-              alert("Ups, please try again");
-            }
-            console.log("TEST",DbToSpotify)
-      })
+        });
+      }
+    });
     }
     async function SaveTrackToList(uri:string) {
       const token = Token || (await GetToken());
@@ -224,7 +236,6 @@ function SpotifyContext({ children }: { children: ReactNode }) {
       );
       if (response.ok) {
         await response.json();    
-        console.log("Sucess")
         return;
       } else {
         throw new Error(`Error playing track: ${response.status}`);
@@ -239,6 +250,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     SearchForArtist,
     PlayTrack,
     SaveAlbumToLibrary,
+    GetAlbumTracks,
     GetLatestAlbumOrTracks,
     SaveTrackToList,
     Artist,
@@ -254,9 +266,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
     addToList,
     setAddToList,
     openModal, 
-    setOpenModal,
-    DbToSpotify, 
-    setDbToSpotify
+    setOpenModal
   };
   return (
     <>
