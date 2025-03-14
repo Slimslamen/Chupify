@@ -206,7 +206,7 @@ function SpotifyContext({ children }: { children: ReactNode }) {
         const data = await response.json();
         const date = new Date();
         date.setDate(date.getDate() - 3);
-        const formattedDate = date.toLocaleDateString(); // Format date to YYYY-MM-DD
+        const formattedDate = date.toLocaleDateString();
           
         data.items.forEach(async (item : IAlbumData) => {
           if (item.album_type === "album" && formattedDate < item.release_date) {
