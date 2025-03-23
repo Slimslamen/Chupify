@@ -1,4 +1,3 @@
-'use client'
 import { AppContext } from '@/app/Context/SpotifyContext';
 import { IContext } from '@/app/Interfaces/types';
 import React, { useContext } from 'react'

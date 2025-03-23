@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/SpotifyContext";
 import { IContext } from "../Interfaces/types";

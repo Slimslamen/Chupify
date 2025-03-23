@@ -1,4 +1,3 @@
-'use client';
 import React, { useContext, useEffect, useState } from "react";
 import ArtistImage from "../(Components)/ArtistImage";
 import FollowButton from "../(Components)/Buttons/FollowButton";
