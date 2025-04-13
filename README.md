@@ -11,9 +11,12 @@ This project is a Spotify integration application developed as part of my thesis
 🎶 Playback Control: Control music playback, including play, pause, skip, and volume adjustments.​
 
 🛠️ Technologies Used
+
 Frontend/Backend: Next.JS​
 
 Database: Prisma (PostgreSQL)​
 
 Authentication: Spotify OAuth 2.0​
+
+API: Spotify API
 
